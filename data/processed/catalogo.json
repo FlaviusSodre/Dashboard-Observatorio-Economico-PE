@@ -1,5 +1,5 @@
 {
-  "gerado_em": "2026-05-11T12:16:54",
+  "gerado_em": "2026-05-12T12:52:51",
   "datasets": [
     {
       "arquivo": "caged_municipal.parquet",
@@ -89,7 +89,7 @@
       "descricao": "PNAD Contínua - 9 estados do NE",
       "fonte": "PNAD Contínua · IBGE",
       "periodicidade": "trimestral",
-      "n_registros": 3850,
+      "n_registros": 3914,
       "colunas": [
         "data",
         "trimestre_label",
@@ -101,9 +101,9 @@
         "valor",
         "unidade"
       ],
-      "tamanho_kb": 32.0,
+      "tamanho_kb": 32.4,
       "periodo_inicio": "2012-03-01",
-      "periodo_fim": "2025-09-01"
+      "periodo_fim": "2025-12-01"
     },
     {
       "arquivo": "pobreza_regional.parquet",
