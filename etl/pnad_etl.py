@@ -105,6 +105,15 @@ INDICADORES = {
             "DESALENTADOS.xlsx",
         ],
     },
+    "INFORMALIDADE": {
+        "chave": "informalidade",
+        "nome": "Pessoas na informalidade",
+        "unidade": "pessoas",
+        "mult": 1,
+        "arquivos_possiveis": [
+            "INFORMALIDADE.xlsx",
+        ],
+    },
 }
 
 
