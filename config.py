@@ -99,7 +99,8 @@ ASSETS = ROOT / "assets"                  # logos, css
 
 # Arquivos de dados específicos
 CAGED_RAW = DATA_RAW / "CAGED_PE.xlsx"
-PNAD_RAW = DATA_RAW / "PNAD_PE.xlsx"
+#PNAD_RAW = DATA_RAW / "PNAD_PE.xlsx"
+PNAD_REGIONAL_RAW_DIR = DATA_RAW / "pnad_regional"
 
 CAGED_MUNICIPAL = DATA_PROCESSED / "caged_municipal.parquet"
 CAGED_GENERO = DATA_PROCESSED / "caged_genero.parquet"

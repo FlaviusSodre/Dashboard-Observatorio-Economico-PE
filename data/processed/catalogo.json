@@ -1,5 +1,5 @@
 {
-  "gerado_em": "2026-05-12T14:52:14",
+  "gerado_em": "2026-05-12T15:50:29",
   "datasets": [
     {
       "arquivo": "caged_municipal.parquet",
@@ -60,7 +60,7 @@
         "saldo",
         "estoque"
       ],
-      "tamanho_kb": 14.1,
+      "tamanho_kb": 14.3,
       "periodo_inicio": "2020-01-01",
       "periodo_fim": "2026-03-01"
     },
@@ -69,7 +69,7 @@
       "descricao": "PNAD Contínua - Pernambuco",
       "fonte": "PNAD Contínua · IBGE",
       "periodicidade": "trimestral",
-      "n_registros": 357,
+      "n_registros": 224,
       "colunas": [
         "data",
         "trimestre",
@@ -80,9 +80,9 @@
         "valor",
         "unidade"
       ],
-      "tamanho_kb": 7.8,
+      "tamanho_kb": 7.2,
       "periodo_inicio": "2012-03-01",
-      "periodo_fim": "2025-06-01"
+      "periodo_fim": "2025-12-01"
     },
     {
       "arquivo": "pnad_regional.parquet",
