@@ -1,12 +1,12 @@
 {
-  "gerado_em": "2026-05-12T12:52:51",
+  "gerado_em": "2026-05-12T14:52:14",
   "datasets": [
     {
       "arquivo": "caged_municipal.parquet",
       "descricao": "CAGED por município",
       "fonte": "Novo CAGED · MTE/SE",
       "periodicidade": "mensal",
-      "n_registros": 12395,
+      "n_registros": 13875,
       "colunas": [
         "data",
         "ano",
@@ -19,16 +19,16 @@
         "saldo",
         "var_relativa"
       ],
-      "tamanho_kb": 116.1,
+      "tamanho_kb": 126.5,
       "periodo_inicio": "2020-01-01",
-      "periodo_fim": "2025-07-01"
+      "periodo_fim": "2026-03-01"
     },
     {
       "arquivo": "caged_genero.parquet",
       "descricao": "CAGED por gênero (estadual)",
       "fonte": "Novo CAGED · MTE/SE",
       "periodicidade": "mensal",
-      "n_registros": 134,
+      "n_registros": 150,
       "colunas": [
         "data",
         "ano",
@@ -39,16 +39,16 @@
         "desligamentos",
         "saldo"
       ],
-      "tamanho_kb": 7.7,
+      "tamanho_kb": 8.1,
       "periodo_inicio": "2020-01-01",
-      "periodo_fim": "2025-07-01"
+      "periodo_fim": "2026-03-01"
     },
     {
       "arquivo": "caged_setor.parquet",
       "descricao": "CAGED por grande setor (estadual)",
       "fonte": "Novo CAGED · MTE/SE",
       "periodicidade": "mensal",
-      "n_registros": 340,
+      "n_registros": 375,
       "colunas": [
         "data",
         "ano",
@@ -60,9 +60,9 @@
         "saldo",
         "estoque"
       ],
-      "tamanho_kb": 13.5,
+      "tamanho_kb": 14.1,
       "periodo_inicio": "2020-01-01",
-      "periodo_fim": "2025-07-01"
+      "periodo_fim": "2026-03-01"
     },
     {
       "arquivo": "pnad_pe.parquet",

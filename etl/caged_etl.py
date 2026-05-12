@@ -26,18 +26,37 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from config import CAGED_RAW, CAGED_MUNICIPAL, CAGED_GENERO
 
 
-# Mapeia o nome do mês em português para número
-MESES_PT = {
-    'Janeiro': 1, 'Fevereiro': 2, 'Março': 3, 'Abril': 4,
-    'Maio': 5, 'Junho': 6, 'Julho': 7, 'Agosto': 8,
-    'Setembro': 9, 'Outubro': 10, 'Novembro': 11, 'Dezembro': 12,
-}
+def converter_data_coluna(coluna: pd.Series) -> pd.Series:
+    """
+    Converte uma coluna de datas para datetime.
 
+    Aceita datas no formato:
+    - 01/01/2020
+    - 01/04/2020
+    - Timestamp do pandas
+    - serial number do Excel, se ainda aparecer em alguma aba
+    """
 
-def parse_data_pt(s: str) -> pd.Timestamp:
-    """Converte 'Janeiro/2020' para Timestamp(2020-01-01)."""
-    mes_str, ano = s.split('/')
-    return pd.Timestamp(year=int(ano), month=MESES_PT[mes_str], day=1)
+    # Caso a coluna venha como número serial do Excel
+    if pd.api.types.is_numeric_dtype(coluna):
+        data = pd.to_datetime(
+            coluna,
+            origin='1899-12-30',
+            unit='D',
+            errors='coerce'
+        )
+    else:
+        # Caso venha como texto ou Timestamp
+        data = pd.to_datetime(
+            coluna,
+            dayfirst=True,
+            errors='coerce'
+        )
+
+    # Normalizar para o primeiro dia do mês
+    data = data.dt.to_period('M').dt.to_timestamp()
+
+    return data
 
 
 def processar_municipal() -> pd.DataFrame:
@@ -45,16 +64,23 @@ def processar_municipal() -> pd.DataFrame:
     df = pd.read_excel(CAGED_RAW, sheet_name='Plan1')
 
     # Renomear colunas para nomes técnicos (sem acentos, sem espaços).
-    # Isso é importante porque vamos usar essas colunas em código.
     df.columns = [
         'uf', 'cod_ibge_6', 'municipio', 'admissoes',
         'desligamentos', 'saldo', 'var_relativa', 'data_str'
     ]
 
-    # Converter data textual para datetime
-    df['data'] = df['data_str'].apply(parse_data_pt)
+    # Converter data no formato 01/01/2020, 01/04/2020 etc.
+    df['data'] = converter_data_coluna(df['data_str'])
 
-    # Adicionar coluna ano e mes (úteis para filtros)
+    # Verificar se alguma data não foi convertida
+    if df['data'].isna().any():
+        exemplos_invalidos = df.loc[df['data'].isna(), 'data_str'].head(10).tolist()
+        raise ValueError(
+            f"Existem datas inválidas na aba Plan1. "
+            f"Exemplos: {exemplos_invalidos}"
+        )
+
+    # Adicionar coluna ano e mes
     df['ano'] = df['data'].dt.year
     df['mes'] = df['data'].dt.month
 
@@ -75,13 +101,18 @@ def processar_genero() -> pd.DataFrame:
     """Lê a aba Caged MF (dados estaduais por gênero)."""
     df = pd.read_excel(CAGED_RAW, sheet_name='Caged MF')
 
-    # A coluna DATA está como serial number do Excel.
-    # origin='1899-12-30' é o ponto zero do Excel.
-    df['data'] = pd.to_datetime(df['DATA'], origin='1899-12-30', unit='D')
-    # Normalizar para o primeiro dia do mês
-    df['data'] = df['data'].dt.to_period('M').dt.to_timestamp()
+    # Agora aceita tanto data no formato 01/01/2020 quanto serial number do Excel
+    df['data'] = converter_data_coluna(df['DATA'])
 
-    # Renomear (atenção: ADMISSÂO está com til diferente no original)
+    # Verificar se alguma data não foi convertida
+    if df['data'].isna().any():
+        exemplos_invalidos = df.loc[df['data'].isna(), 'DATA'].head(10).tolist()
+        raise ValueError(
+            f"Existem datas inválidas na aba Caged MF. "
+            f"Exemplos: {exemplos_invalidos}"
+        )
+
+    # Renomear colunas
     df = df.rename(columns={
         'SEXO': 'sexo',
         'ADMISSÂO': 'admissoes',
@@ -95,8 +126,10 @@ def processar_genero() -> pd.DataFrame:
 
     df = df.sort_values(['data', 'sexo']).reset_index(drop=True)
 
-    return df[['data', 'ano', 'mes', 'uf', 'sexo',
-               'admissoes', 'desligamentos', 'saldo']]
+    return df[[
+        'data', 'ano', 'mes', 'uf', 'sexo',
+        'admissoes', 'desligamentos', 'saldo'
+    ]]
 
 
 def main():
