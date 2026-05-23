@@ -142,10 +142,12 @@ def header(titulo, sobretitulo, orgao, atualizado_em):
     return html.Div(
         className="app-header",
         children=[
-            # Lado esquerdo: logo + nome do órgão
+            # Lado esquerdo: logo (desktop) / link Home (mobile)
             html.Div(
                 className="header-esq",
                 children=[
+                    html.A("Home", id='btn-home-header-mobile',
+                           n_clicks=0, className='header-home-mobile'),
                     html.Img(src="/assets/logo.jpeg", className="header-logo"),
                 ]
             ),
@@ -157,7 +159,7 @@ def header(titulo, sobretitulo, orgao, atualizado_em):
                     html.H1(titulo, className="header-titulo"),
                 ]
             ),
-            # Lado direito: status + bandeira de PE
+            # Lado direito: status + bandeira (desktop) / logo.jpeg (mobile)
             html.Div(
                 className="header-dir",
                 children=[
@@ -177,6 +179,9 @@ def header(titulo, sobretitulo, orgao, atualizado_em):
                                      alt="Bandeira de Pernambuco"),
                         ]
                     ),
+                    html.Img(src="/assets/logo.jpeg",
+                             className="header-logo-mobile-dir",
+                             alt="Logo"),
                 ]
             ),
         ]

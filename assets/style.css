@@ -1275,47 +1275,187 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
 }
 
 /* ==========================================================================
+   MENU HAMBÚRGUER + DRAWER MOBILE
+   (visível apenas em ≤ 768px; desktop usa display:none !important)
+   ========================================================================== */
+
+/* Link "Home" no header — oculto no desktop */
+.header-home-mobile {
+    display: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--azul-ardosia);
+    text-decoration: none;
+    white-space: nowrap;
+    align-items: center;
+}
+
+/* Logo duplicado no header-dir — oculto no desktop */
+.header-logo-mobile-dir {
+    display: none;
+    height: 32px;
+    width: auto;
+    border-radius: 2px;
+}
+
+/* Barra hambúrguer (abaixo do header, dentro de nav-container) */
+.mobile-hamburger-bar {
+    display: none;
+    align-items: center;
+    padding: 7px 14px;
+    background: var(--branco);
+    border-bottom: 1px solid var(--cinza-neblina);
+}
+
+/* Botão ☰ */
+.btn-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 4px;
+}
+.hamburger-linha {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--grafite);
+    border-radius: 1px;
+    transition: background 120ms ease;
+}
+.btn-hamburger:hover .hamburger-linha { background: var(--preto-titulo); }
+
+/* Overlay escuro atrás do drawer */
+.mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 200;
+}
+.mobile-overlay.visivel { display: block; }
+
+/* Drawer lateral (desliza da direita) */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(300px, 88vw);
+    height: 100%;
+    background: var(--branco);
+    z-index: 201;
+    transform: translateX(100%);
+    transition: transform 260ms cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.12);
+}
+.mobile-menu.aberto { transform: translateX(0); }
+
+/* Cabeçalho do drawer */
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    border-bottom: 0.5px solid var(--cinza-neblina);
+    position: sticky;
+    top: 0;
+    background: var(--branco);
+    z-index: 1;
+}
+.mobile-menu-titulo {
+    font-size: 11px;
+    color: var(--cinza-medio);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+.btn-mobile-fechar {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: var(--cinza-medio);
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+    border-radius: 3px;
+}
+.btn-mobile-fechar:hover { color: var(--grafite); }
+
+/* Itens do drawer */
+.mobile-nav-home {
+    display: block;
+    padding: 14px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--azul-ardosia);
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--cinza-neblina);
+}
+.mobile-nav-home:hover { background: var(--bege-fundo); }
+
+.mobile-nav-grupo {
+    padding: 10px 18px 6px;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cinza-medio);
+    background: var(--bege-fundo-claro);
+    border-bottom: 0.5px solid var(--cinza-neblina);
+}
+.mobile-nav-sub {
+    display: block;
+    padding: 11px 18px 11px 24px;
+    font-size: 13px;
+    color: var(--grafite);
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--cinza-neblina);
+    transition: background 100ms ease;
+}
+.mobile-nav-sub:hover { background: var(--bege-fundo); color: var(--preto-titulo); }
+.mobile-nav-fonte { font-size: 11px; color: var(--cinza-medio); }
+
+/* Desktop: garante que nada mobile aparece */
+@media (min-width: 769px) {
+    .mobile-menu,
+    .mobile-overlay,
+    .mobile-hamburger-bar,
+    .btn-hamburger,
+    .header-home-mobile,
+    .header-logo-mobile-dir { display: none !important; }
+}
+
+/* ==========================================================================
    RESPONSIVO — Tablet e Mobile
    ========================================================================== */
 
 /* --- Tablet (≤ 768px) ----- */
 @media (max-width: 768px) {
 
-    /* Header */
+    /* Header mobile: Home à esquerda, logo.jpeg à direita */
     .app-header {
         padding: 10px 14px;
         gap: 10px;
     }
-    .header-logo { height: 32px; }
     .header-titulo { font-size: 15px; }
     .header-sobretitulo { font-size: 8px; }
-    .header-status { display: none; }
-    .bandeira-pe { height: 28px; }
+    .header-logo            { display: none; }
+    .header-home-mobile     { display: flex; }
+    .header-logo-mobile-dir { display: block; }
+    .header-status          { display: none; }
+    .bandeira-pe            { display: none; }
+    .header-centro { border-left: none; padding-left: 0; }
 
-    /* Navegação principal — scroll horizontal */
-    .nav-eixos {
-        padding: 0 12px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        white-space: nowrap;
-        flex-wrap: nowrap;
-    }
-    .nav-eixos::-webkit-scrollbar { display: none; }
-    .nav-eixo { padding: 10px 10px; font-size: 11.5px; }
-    .nav-home { margin-right: 10px; padding-right: 12px; }
+    /* Navegação desktop — substituída pelo menu hambúrguer */
+    .nav-eixos, .nav-subs { display: none; }
 
-    /* Sub-navegação — scroll horizontal */
-    .nav-subs {
-        padding: 0 12px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        white-space: nowrap;
-        flex-wrap: nowrap;
-    }
-    .nav-subs::-webkit-scrollbar { display: none; }
-    .nav-sub { padding: 7px 10px; font-size: 11px; }
+    /* Barra hambúrguer */
+    .mobile-hamburger-bar { display: flex; }
+    .btn-hamburger        { display: flex; }
 
     /* Conteúdo da aba */
     .aba-conteudo { padding: 14px 12px; }
@@ -1370,12 +1510,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
 /* --- Smartphone (≤ 480px) ----- */
 @media (max-width: 480px) {
 
-    /* Header — esconde lado direito completo em telas muito pequenas */
-    .header-dir { display: none; }
-    .header-centro {
-        border-left: none;
-        padding-left: 10px;
-    }
+    /* Header */
     .header-titulo { font-size: 13px; }
     .header-sobretitulo { display: none; }
 

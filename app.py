@@ -158,17 +158,44 @@ def construir_nav_subs(eixo_ativo: str, sub_ativa: str):
     return html.Div(className="nav-subs", children=items)
 
 
+def construir_mobile_menu():
+    """Conteúdo do drawer de navegação mobile."""
+    items = [
+        html.Div(className='mobile-menu-header', children=[
+            html.Span('Navegação', className='mobile-menu-titulo'),
+            html.Button('✕', id='btn-mobile-fechar',
+                        className='btn-mobile-fechar', n_clicks=0),
+        ]),
+        html.A('Home',
+               id={'type': 'mobile-nav-eixo', 'index': '__home__'},
+               n_clicks=0, className='mobile-nav-home'),
+    ]
+    for eixo in EIXOS:
+        if eixo['nome'] == '__home__':
+            continue
+        items.append(html.Div(eixo['nome'], className='mobile-nav-grupo'))
+        for sub in [a for a in ABAS if a['eixo'] == eixo['nome']]:
+            fonte = sub.get('fonte_legenda', '')
+            items.append(html.A(
+                children=[
+                    sub['sub'],
+                    html.Span(f' · {fonte}', className='mobile-nav-fonte') if fonte else '',
+                ],
+                id={'type': 'mobile-nav-sub', 'index': sub['id']},
+                n_clicks=0, className='mobile-nav-sub',
+            ))
+    return items
+
+
 # ============================================================================
 # Layout principal
 # ============================================================================
 
 def construir_layout():
     """Layout estático do app. As mudanças de aba acontecem via callback."""
-    # Home é sempre a aba inicial
     aba_inicial_id = '__home__'
     eixo_inicial = '__home__'
 
-    # Data de atualização: pega a última data do CAGED
     try:
         ultima = data.caged_municipal()['data'].max()
         atualizado_em = ultima.strftime("%b · %Y").lower()
@@ -184,11 +211,37 @@ def construir_layout():
             atualizado_em=atualizado_em,
         ),
 
-        # Navegação - dois níveis (oculta na Home)
+        # Overlay escuro do menu mobile
+        html.Div(id='mobile-overlay', className='mobile-overlay', n_clicks=0),
+
+        # Drawer lateral de navegação mobile
+        html.Div(
+            id='mobile-menu-container',
+            className='mobile-menu',
+            children=construir_mobile_menu(),
+        ),
+
+        # Navegação desktop — dois níveis (oculta na Home)
         html.Div(
             id='nav-container',
-            style={'display': 'none'},  # oculto inicial (estamos na Home)
+            style={'display': 'none'},
             children=[
+                # Barra hambúrguer (visível apenas em mobile)
+                html.Div(
+                    className='mobile-hamburger-bar',
+                    children=[
+                        html.Button(
+                            id='btn-hamburger',
+                            className='btn-hamburger',
+                            n_clicks=0,
+                            children=[
+                                html.Span(className='hamburger-linha'),
+                                html.Span(className='hamburger-linha'),
+                                html.Span(className='hamburger-linha'),
+                            ],
+                        )
+                    ],
+                ),
                 construir_nav_eixos(eixo_inicial),
                 construir_nav_subs(eixo_inicial, ''),
             ]
@@ -201,7 +254,6 @@ def construir_layout():
         dcc.Location(id='url', refresh=False),
 
         # HOME estática no layout — sempre presente no DOM
-        # Visibilidade controlada por display
         html.Div(
             id='home-container',
             children=tab_home.layout(),
@@ -221,12 +273,8 @@ app.layout = construir_layout
 # ============================================================================
 # Callbacks de navegação
 # ============================================================================
-# Um único callback gerencia toda a navegação. Responde a:
-# - Clique em qualquer eixo (barra superior)
-# - Clique em qualquer sub-aba (chips)
-# - Carga inicial (renderiza a primeira aba)
 
-from dash import ALL, ctx
+from dash import ALL, ctx, State
 
 
 @app.callback(
@@ -236,76 +284,111 @@ from dash import ALL, ctx
     Output('home-container', 'style'),
     Output('conteudo-aba', 'children'),
     Output('conteudo-aba', 'style'),
-    Input({'type': 'nav-sub', 'index': ALL}, 'n_clicks'),
-    Input({'type': 'nav-eixo', 'index': ALL}, 'n_clicks'),
-    Input('btn-entrar', 'n_clicks'),
+    Output('mobile-menu-container', 'className'),
+    Output('mobile-overlay', 'className'),
+    Input({'type': 'nav-sub',        'index': ALL}, 'n_clicks'),
+    Input({'type': 'nav-eixo',       'index': ALL}, 'n_clicks'),
+    Input({'type': 'mobile-nav-sub', 'index': ALL}, 'n_clicks'),
+    Input({'type': 'mobile-nav-eixo','index': ALL}, 'n_clicks'),
+    Input('btn-entrar',           'n_clicks'),
+    Input('btn-hamburger',        'n_clicks'),
+    Input('btn-mobile-fechar',    'n_clicks'),
+    Input('mobile-overlay',       'n_clicks'),
+    Input('btn-home-header-mobile','n_clicks'),
+    State('mobile-menu-container', 'className'),
     prevent_initial_call=True,
 )
-def navegar(_clicks_subs, _clicks_eixos, _click_entrar):
+def navegar(_cs, _ce, _mcs, _mce, _entrar, _ham, _fechar, _ovl, _home_mob,
+            menu_class):
     """
-    Gerencia transições entre Home e abas.
+    Gerencia navegação desktop e mobile.
 
-    Estado inicial (definido no layout):
-    - home-container: display=block (visível)
-    - nav-container: display=none (oculto)
-    - conteudo-aba: display=none (oculto, vazio)
-
-    Transições:
-    - btn-entrar → mostra primeira aba (Mercado de Trabalho)
-    - nav-eixo __home__ → volta pra Home
-    - outros nav-eixo → mostra primeira sub-aba desse eixo
-    - nav-sub X → mostra sub-aba X
+    Outputs 1-6: lógica de aba existente (inalterada).
+    Output 7: classe CSS do drawer mobile ('mobile-menu' | 'mobile-menu aberto').
+    Output 8: classe CSS do overlay ('mobile-overlay' | 'mobile-overlay visivel').
     """
     from dash import no_update
     triggered = ctx.triggered_id
 
     STYLE_VISIVEL = {'display': 'block'}
-    STYLE_OCULTO = {'display': 'none'}
+    STYLE_OCULTO  = {'display': 'none'}
+    MENU_ABERTO   = 'mobile-menu aberto'
+    MENU_FECHADO  = 'mobile-menu'
+    OVL_VISIVEL   = 'mobile-overlay visivel'
+    OVL_OCULTO    = 'mobile-overlay'
 
-    # Botão "Acessar o Observatório" da Home
+    def nav_para_aba(aba):
+        nav = [
+            html.Div(
+                className='mobile-hamburger-bar',
+                children=[html.Button(
+                    id='btn-hamburger', className='btn-hamburger', n_clicks=0,
+                    children=[html.Span(className='hamburger-linha')] * 3,
+                )],
+            ),
+            construir_nav_eixos(aba['eixo']),
+            construir_nav_subs(aba['eixo'], aba['sub']),
+        ]
+        return nav
+
+    # --- Hambúrguer: toggle abrir/fechar ---
+    if triggered == 'btn-hamburger':
+        aberto = MENU_ABERTO not in (menu_class or '')
+        return ([no_update] * 6
+                + [MENU_ABERTO if aberto else MENU_FECHADO,
+                   OVL_VISIVEL if aberto else OVL_OCULTO])
+
+    # --- Fechar drawer sem navegar ---
+    if triggered in ('btn-mobile-fechar', 'mobile-overlay'):
+        return [no_update] * 6 + [MENU_FECHADO, OVL_OCULTO]
+
+    # --- Home pelo link do header mobile ---
+    if triggered == 'btn-home-header-mobile':
+        return (no_update, no_update,
+                STYLE_OCULTO, STYLE_VISIVEL,
+                no_update, STYLE_OCULTO,
+                MENU_FECHADO, OVL_OCULTO)
+
+    # --- Botão "Acessar o Observatório" da capa ---
     if triggered == 'btn-entrar':
         aba = ABAS[0]
-        nav = [construir_nav_eixos(aba['eixo']),
-               construir_nav_subs(aba['eixo'], aba['sub'])]
-        return (aba['id'], nav,
-                STYLE_VISIVEL,  # nav visível
-                STYLE_OCULTO,   # home oculta
-                aba['module'].layout(),
-                STYLE_VISIVEL)  # conteudo visível
+        return (aba['id'], nav_para_aba(aba),
+                STYLE_VISIVEL, STYLE_OCULTO,
+                aba['module'].layout(), STYLE_VISIVEL,
+                MENU_FECHADO, OVL_OCULTO)
 
+    # --- Cliques em itens de navegação (desktop e mobile) ---
     if isinstance(triggered, dict):
-        if triggered.get('type') == 'nav-eixo':
+        tipo = triggered.get('type')
+
+        if tipo in ('nav-eixo', 'mobile-nav-eixo'):
             eixo_clicado = triggered['index']
             if eixo_clicado == '__home__':
-                # Voltar para Home — sem re-renderizar nada
                 return (no_update, no_update,
-                        STYLE_OCULTO,  # nav oculto
-                        STYLE_VISIVEL, # home visível
-                        no_update,
-                        STYLE_OCULTO)  # conteudo oculto
+                        STYLE_OCULTO, STYLE_VISIVEL,
+                        no_update, STYLE_OCULTO,
+                        MENU_FECHADO, OVL_OCULTO)
             primeiras = [a for a in ABAS if a['eixo'] == eixo_clicado]
             if not primeiras:
-                return [no_update] * 6
+                return [no_update] * 6 + [MENU_FECHADO, OVL_OCULTO]
             aba_id = primeiras[0]['id']
-        elif triggered.get('type') == 'nav-sub':
+
+        elif tipo in ('nav-sub', 'mobile-nav-sub'):
             aba_id = triggered['index']
+
         else:
-            return [no_update] * 6
+            return [no_update] * 6 + [no_update, no_update]
     else:
-        return [no_update] * 6
+        return [no_update] * 6 + [no_update, no_update]
 
     aba = tabs.aba_por_id(aba_id)
     if aba is None:
-        return [no_update] * 6
+        return [no_update] * 6 + [no_update, no_update]
 
-    nav = [construir_nav_eixos(aba['eixo']),
-           construir_nav_subs(aba['eixo'], aba['sub'])]
-
-    return (aba['id'], nav,
-            STYLE_VISIVEL,
-            STYLE_OCULTO,
-            aba['module'].layout(),
-            STYLE_VISIVEL)
+    return (aba['id'], nav_para_aba(aba),
+            STYLE_VISIVEL, STYLE_OCULTO,
+            aba['module'].layout(), STYLE_VISIVEL,
+            MENU_FECHADO, OVL_OCULTO)
 
 
 # ============================================================================
