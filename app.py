@@ -42,7 +42,7 @@ app = Dash(
         {"name": "mobile-web-app-capable", "content": "yes"},
         {"name": "apple-mobile-web-app-capable", "content": "yes"},
         {"name": "apple-mobile-web-app-status-bar-style", "content": "default"},
-        {"name": "apple-mobile-web-app-title", "content": "PE em Dados"},
+        {"name": "apple-mobile-web-app-title", "content": "Observatorio PE"},
         {"name": "description",
          "content": "Observatório Econômico de Pernambuco — indicadores econômicos em dados."},
     ],
@@ -59,7 +59,7 @@ app.index_string = '''<!DOCTYPE html>
     <title>{%title%}</title>
     {%favicon%}
     <link rel="manifest" href="/assets/manifest.json">
-    <link rel="apple-touch-icon" href="/assets/logo.jpeg">
+    <link rel="apple-touch-icon" href="/assets/bandeira_pe.jpg">
     {%css%}
   </head>
   <body>
