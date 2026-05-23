@@ -1273,3 +1273,166 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
         position: static;
     }
 }
+
+/* ==========================================================================
+   RESPONSIVO — Tablet e Mobile
+   ========================================================================== */
+
+/* --- Tablet (≤ 768px) ----- */
+@media (max-width: 768px) {
+
+    /* Header */
+    .app-header {
+        padding: 10px 14px;
+        gap: 10px;
+    }
+    .header-logo { height: 32px; }
+    .header-titulo { font-size: 15px; }
+    .header-sobretitulo { font-size: 8px; }
+    .header-status { display: none; }
+    .bandeira-pe { height: 28px; }
+
+    /* Navegação principal — scroll horizontal */
+    .nav-eixos {
+        padding: 0 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        white-space: nowrap;
+        flex-wrap: nowrap;
+    }
+    .nav-eixos::-webkit-scrollbar { display: none; }
+    .nav-eixo { padding: 10px 10px; font-size: 11.5px; }
+    .nav-home { margin-right: 10px; padding-right: 12px; }
+
+    /* Sub-navegação — scroll horizontal */
+    .nav-subs {
+        padding: 0 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        white-space: nowrap;
+        flex-wrap: nowrap;
+    }
+    .nav-subs::-webkit-scrollbar { display: none; }
+    .nav-sub { padding: 7px 10px; font-size: 11px; }
+
+    /* Conteúdo da aba */
+    .aba-conteudo { padding: 14px 12px; }
+    .aba-titulo-bloco { margin-bottom: 10px; }
+
+    /* KPIs — 2 colunas */
+    .kpi-faixa,
+    .kpi-faixa-quatro,
+    .kpi-faixa-cinco {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Seção corpo — tabelas roláveis */
+    .secao-corpo {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Grids — empilhar em coluna única */
+    .grid-duplo,
+    .grid-1-1,
+    .grid-triplo {
+        grid-template-columns: 1fr;
+    }
+    .ranking-duplo { grid-template-columns: 1fr; }
+    .duplo-donut { grid-template-columns: 1fr; }
+    .duplo-donut-header { grid-template-columns: 1fr; }
+    .legenda-rds { grid-template-columns: repeat(2, 1fr); }
+
+    /* Filtros */
+    .filtros-row { flex-wrap: wrap; gap: 10px; }
+
+    /* Home */
+    .home-centro { padding: 28px 24px 16px; }
+    .home-brasao { width: 220px; height: 70px; margin-bottom: 24px; }
+    .home-descricao { font-size: 15px; }
+    .home-acoes { margin-bottom: 32px; }
+    .home-btn-entrar { padding: 14px 36px; font-size: 14px; }
+    .home-eixos-chips { display: none; }
+    .home-rodape { padding: 16px 24px 20px; }
+
+    /* Aviso construção */
+    .aviso-construcao { flex-direction: column; gap: 10px; }
+
+    /* Filtro donut */
+    .filtro-donut { max-width: 100%; }
+
+    /* Seção header */
+    .secao-header { flex-direction: column; gap: 6px; }
+}
+
+/* --- Smartphone (≤ 480px) ----- */
+@media (max-width: 480px) {
+
+    /* Header — esconde lado direito completo em telas muito pequenas */
+    .header-dir { display: none; }
+    .header-centro {
+        border-left: none;
+        padding-left: 10px;
+    }
+    .header-titulo { font-size: 13px; }
+    .header-sobretitulo { display: none; }
+
+    /* Conteúdo da aba */
+    .aba-conteudo { padding: 10px 8px; }
+    --pad-pagina: 10px;
+
+    /* KPIs — padding interno menor */
+    .kpi-simples { padding: 10px 12px; }
+    .kpi-valor { font-size: 22px; }
+
+    /* Home */
+    .home-centro { padding: 20px 16px 12px; gap: 0; }
+    .home-textos { margin-bottom: 32px; }
+    .home-brasao { width: 180px; height: 60px; margin-bottom: 20px; }
+    .home-descricao {
+        font-size: 14px;
+        max-width: 100%;
+    }
+    .home-acoes { margin-bottom: 28px; }
+    .home-btn-entrar { padding: 13px 28px; font-size: 13px; }
+    .home-rodape {
+        flex-direction: column;
+        gap: 6px;
+        padding: 14px 16px 18px;
+        align-items: flex-start;
+    }
+
+    /* Legenda RDs */
+    .legenda-rds { grid-template-columns: 1fr; }
+
+    /* Seção body — menos padding */
+    .secao { padding: 10px 12px; }
+
+    /* Aba título */
+    .aba-titulo { font-size: 14px; }
+
+    /* Tabelas — fonte menor para caber */
+    .tabela-estados tbody td,
+    .tabela-gestao tbody td,
+    .tabela-pib tbody td {
+        font-size: 11px;
+        padding: 7px 8px;
+    }
+    .tabela-estados thead th,
+    .tabela-gestao thead th,
+    .tabela-pib thead th {
+        font-size: 9px;
+        padding: 8px 8px;
+    }
+
+    /* Suporte a safe area (notch iOS) */
+    .app-header {
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+    }
+    .app-footer {
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+}

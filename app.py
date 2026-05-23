@@ -35,10 +35,61 @@ app = Dash(
     title=f"{META['titulo']} · Observatório Econômico",
     update_title=None,  # remove o "Updating..." do title bar
     suppress_callback_exceptions=True,
+    meta_tags=[
+        {"name": "viewport",
+         "content": "width=device-width, initial-scale=1.0, viewport-fit=cover"},
+        {"name": "theme-color", "content": "#5B7B9A"},
+        {"name": "mobile-web-app-capable", "content": "yes"},
+        {"name": "apple-mobile-web-app-capable", "content": "yes"},
+        {"name": "apple-mobile-web-app-status-bar-style", "content": "default"},
+        {"name": "apple-mobile-web-app-title", "content": "PE em Dados"},
+        {"name": "description",
+         "content": "Observatório Econômico de Pernambuco — indicadores econômicos em dados."},
+    ],
 )
 
 # Necessário para deploy em produção (gunicorn, render, etc)
 server = app.server
+
+# PWA: injeta link do manifest e registro do service worker
+app.index_string = '''<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    {%metas%}
+    <title>{%title%}</title>
+    {%favicon%}
+    <link rel="manifest" href="/assets/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/logo.jpeg">
+    {%css%}
+  </head>
+  <body>
+    {%app_entry%}
+    <footer>
+      {%config%}
+      {%scripts%}
+      {%renderer%}
+    </footer>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+          .catch(function(err) { console.warn('SW:', err); });
+      }
+    </script>
+  </body>
+</html>
+'''
+
+# PWA: serve o service worker na raiz (escopo global /sw.js)
+import os as _os
+from flask import send_from_directory as _send_from_directory
+
+@server.route('/sw.js')
+def _serve_sw():
+    root = _os.path.dirname(__file__)
+    return _send_from_directory(
+        _os.path.join(root, 'assets'), 'sw.js',
+        mimetype='application/javascript'
+    )
 
 
 # ============================================================================
