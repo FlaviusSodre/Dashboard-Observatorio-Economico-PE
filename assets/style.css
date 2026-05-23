@@ -1447,11 +1447,10 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
 /* --- Tablet (≤ 768px) ----- */
 @media (max-width: 768px) {
 
-    /* Header mobile: Home à esquerda, título centralizado, logo.jpeg à direita */
+    /* Header mobile: Home à esquerda, título no centro flex, logo.jpeg à direita */
     .app-header {
         padding: 10px 14px;
         gap: 10px;
-        position: relative;   /* ancora o header-centro com position:absolute */
     }
     .header-logo            { display: none; }
     .header-home-mobile     { display: flex; }
@@ -1460,18 +1459,24 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
     .bandeira-pe            { display: none; }
     .header-sobretitulo { display: none; }
 
-    /* Centraliza o título independente dos lados */
+    /* header-centro: flex item contido entre Home e logo */
     .header-centro {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
+        flex: 1;
         border-left: none;
-        padding-left: 0;
-        text-align: center;
-        pointer-events: none;
+        padding-left: 8px;
+        min-width: 0;           /* impede que ultrapasse o espaço disponível */
+        overflow: hidden;
+    }
+    .header-titulo-mobile {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    /* Capa (nav-container oculto): mantém "Pernambuco em dados" */
+    /* Capa: "Pernambuco em dados" alinhado à esquerda */
+    .app-shell:has(#nav-container[style*="display: none"]) .header-centro {
+        text-align: left;
+    }
     .app-shell:has(#nav-container[style*="display: none"]) .header-titulo {
         display: block;
         font-size: 14px;
@@ -1480,7 +1485,11 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
         display: none;
     }
 
-    /* Dentro de uma aba (nav-container visível): mostra "Observatório Econômico PE" */
+    /* Aba: "Observatório Econômico PE" centralizado entre Home e logo */
+    .app-shell:has(#nav-container[style*="display: block"]) .header-centro {
+        text-align: center;
+        padding-left: 0;
+    }
     .app-shell:has(#nav-container[style*="display: block"]) .header-titulo {
         display: none;
     }
