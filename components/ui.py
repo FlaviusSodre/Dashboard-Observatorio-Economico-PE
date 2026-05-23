@@ -157,6 +157,8 @@ def header(titulo, sobretitulo, orgao, atualizado_em):
                 children=[
                     html.P(sobretitulo.upper(), className="header-sobretitulo"),
                     html.H1(titulo, className="header-titulo"),
+                    html.P("Observatório Econômico PE",
+                           className="header-titulo-mobile"),
                 ]
             ),
             # Lado direito: status + bandeira (desktop) / logo.jpeg (mobile)

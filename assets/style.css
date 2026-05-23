@@ -1279,6 +1279,16 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
    (visível apenas em ≤ 768px; desktop usa display:none !important)
    ========================================================================== */
 
+/* Título alternativo mobile — oculto no desktop */
+.header-titulo-mobile {
+    display: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--preto-titulo);
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
 /* Link "Home" no header — oculto no desktop */
 .header-home-mobile {
     display: none;
@@ -1426,7 +1436,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
     .mobile-hamburger-bar,
     .btn-hamburger,
     .header-home-mobile,
-    .header-logo-mobile-dir { display: none !important; }
+    .header-logo-mobile-dir,
+    .header-titulo-mobile { display: none !important; }
 }
 
 /* ==========================================================================
@@ -1436,19 +1447,46 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
 /* --- Tablet (≤ 768px) ----- */
 @media (max-width: 768px) {
 
-    /* Header mobile: Home à esquerda, logo.jpeg à direita */
+    /* Header mobile: Home à esquerda, título centralizado, logo.jpeg à direita */
     .app-header {
         padding: 10px 14px;
         gap: 10px;
+        position: relative;   /* ancora o header-centro com position:absolute */
     }
-    .header-titulo { font-size: 15px; }
-    .header-sobretitulo { font-size: 8px; }
     .header-logo            { display: none; }
     .header-home-mobile     { display: flex; }
     .header-logo-mobile-dir { display: block; }
     .header-status          { display: none; }
     .bandeira-pe            { display: none; }
-    .header-centro { border-left: none; padding-left: 0; }
+    .header-sobretitulo { display: none; }
+
+    /* Centraliza o título independente dos lados */
+    .header-centro {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: none;
+        padding-left: 0;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    /* Capa (nav-container oculto): mantém "Pernambuco em dados" */
+    .app-shell:has(#nav-container[style*="display: none"]) .header-titulo {
+        display: block;
+        font-size: 14px;
+    }
+    .app-shell:has(#nav-container[style*="display: none"]) .header-titulo-mobile {
+        display: none;
+    }
+
+    /* Dentro de uma aba (nav-container visível): mostra "Observatório Econômico PE" */
+    .app-shell:has(#nav-container[style*="display: block"]) .header-titulo {
+        display: none;
+    }
+    .app-shell:has(#nav-container[style*="display: block"]) .header-titulo-mobile {
+        display: block;
+    }
 
     /* Navegação desktop — substituída pelo menu hambúrguer */
     .nav-eixos, .nav-subs { display: none; }
