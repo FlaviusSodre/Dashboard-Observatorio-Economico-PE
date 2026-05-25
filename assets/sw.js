@@ -6,7 +6,7 @@ const SHELL = [
   '/',
   '/assets/style.css',
   '/assets/logo.jpeg',
-  '/assets/Icone_App_3.png',
+  '/assets/Icone_App_2.png',
 ];
 
 self.addEventListener('install', function(e) {
