@@ -11,9 +11,9 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "/assets/bandeira_pe.jpg",
+      "src": "/assets/Icone_App_1.png",
       "sizes": "any",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any"
     }
   ]

@@ -59,7 +59,7 @@ app.index_string = '''<!DOCTYPE html>
     <title>{%title%}</title>
     {%favicon%}
     <link rel="manifest" href="/assets/manifest.json">
-    <link rel="apple-touch-icon" href="/assets/bandeira_pe.jpg">
+    <link rel="apple-touch-icon" href="/assets/Icone_App_1.png">
     {%css%}
   </head>
   <body>
