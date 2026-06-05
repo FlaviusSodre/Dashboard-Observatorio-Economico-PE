@@ -18,12 +18,19 @@ from functools import lru_cache
 
 import pandas as pd
 
+import unicodedata
+
 from config import (
     CAGED_MUNICIPAL, CAGED_GENERO, CAGED_SETOR, PNAD_PE,
     PNAD_REGIONAL, POBREZA_REGIONAL,
     MUNICIPIOS_RD, PREFEITOS, VEREADORES,
     GEO_MUNICIPIOS, CATALOGO,
 )
+
+try:
+    from config import FPM_PE
+except ImportError:
+    FPM_PE = None
 
 # PIB é opcional (pode não existir ainda em algumas instalações)
 try:
@@ -1394,5 +1401,217 @@ def pib_estadual_nominal_e_real_base2010() -> pd.DataFrame:
 
     estado['cresc_nominal_pct'] = estado['pib_nominal'].pct_change() * 100
     estado['cresc_real_pct'] = estado['pib_real_base2010'].pct_change() * 100
+
+
+# ============================================================================
+# Transferências Fiscais (FPM/STN) - FPMfinalPE.parquet
+# ============================================================================
+
+_FPM_ITENS = ['FPM', 'ITR', 'FPE', 'ICMS', 'IPI-EXP', 'IPVA', 'ITCMD', 'FEP']
+
+# Nomes que permanecem diferentes após normalização (unicode+lower+strip)
+_FPM_MAPA_MANUAL = {
+    'iguaraci':                'Iguaracy',
+    'ilha de itamaraca':       'Itamaracá',
+    'santa maria do cambuca':  'Santa Maria do Cumbucá',
+    'sao caitano':             'São Caetano',
+    'sao lourenco da mata':    'São Lorenço da Mata',
+    'vicencia':                'Viciencia',
+}
+
+
+def _norm(s: str) -> str:
+    return (unicodedata.normalize('NFKD', s)
+            .encode('ascii', 'ignore')
+            .decode('ascii')
+            .lower()
+            .strip())
+
+
+@lru_cache(maxsize=None)
+def fpm_pe() -> pd.DataFrame:
+    """
+    Transferências fiscais dos municípios de PE (8 itens selecionados).
+
+    Colunas de saída: cod_ibge_6, municipio, regiao_desenvolvimento,
+                      ANO, Mês, item, total_mes
+
+    O join com municipios_rd é feito por nome normalizado + mapeamento
+    manual para os 4 municípios com grafia divergente.
+    """
+    if FPM_PE is None or not FPM_PE.exists():
+        return pd.DataFrame()
+
+    df = pd.read_parquet(FPM_PE)
+    df = df[df['Item transferência'].isin(_FPM_ITENS)].copy()
+
+    df['total_mes'] = (df['1º Decêndio'].fillna(0)
+                       + df['2º Decêndio'].fillna(0)
+                       + df['3º Decêndio'].fillna(0))
+    df = df.rename(columns={'Município': 'municipio_fpm',
+                             'Item transferência': 'item'})
+    df['_norm'] = df['municipio_fpm'].apply(_norm)
+
+    # Corrige manualmente antes do join
+    for k, v in _FPM_MAPA_MANUAL.items():
+        df.loc[df['_norm'] == k, 'municipio_fpm'] = v
+
+    # Rebuild _norm após correção manual
+    df['_norm'] = df['municipio_fpm'].apply(_norm)
+
+    rd = municipios_rd().copy()
+    rd['_norm'] = rd['municipio'].apply(_norm)
+
+    df = df.merge(rd[['cod_ibge_6', 'municipio', 'regiao_desenvolvimento', '_norm']],
+                  on='_norm', how='left')
+    df = df.drop(columns=['_norm', 'municipio_fpm', 'UF',
+                           '1º Decêndio', '2º Decêndio', '3º Decêndio',
+                           'Transferência'], errors='ignore')
+    return df[['cod_ibge_6', 'municipio', 'regiao_desenvolvimento',
+               'ANO', 'Mês', 'item', 'total_mes']].reset_index(drop=True)
+
+
+def fpm_anos_disponiveis() -> list:
+    """Anos disponíveis, mais recente primeiro."""
+    df = fpm_pe()
+    return sorted(df['ANO'].unique().tolist(), reverse=True)
+
+
+def fpm_ultimo_ano() -> int:
+    return fpm_anos_disponiveis()[0]
+
+
+def fpm_municipal_ano(ano: int) -> pd.DataFrame:
+    """
+    Total de transferências por município em um ano, com participações.
+    Colunas: cod_ibge_6, municipio, regiao_desenvolvimento,
+             total, pct_na_rd, pct_no_estado
+    """
+    df = fpm_pe()
+    sub = df[df['ANO'] == ano]
+    agg = (sub.groupby(['cod_ibge_6', 'municipio', 'regiao_desenvolvimento'],
+                        as_index=False)['total_mes'].sum()
+             .rename(columns={'total_mes': 'total'}))
+
+    soma_rd = (agg.groupby('regiao_desenvolvimento', as_index=False)['total']
+                  .sum().rename(columns={'total': 'total_rd'}))
+    agg = agg.merge(soma_rd, on='regiao_desenvolvimento', how='left')
+    total_estado = agg['total'].sum()
+    agg['pct_na_rd']      = 100 * agg['total'] / agg['total_rd']
+    agg['pct_no_estado']  = 100 * agg['total'] / total_estado
+    return agg
+
+
+def fpm_ranking_municipios(ano: int, top_n: int = 10) -> pd.DataFrame:
+    """Top N municípios por total de transferências em um ano."""
+    return (fpm_municipal_ano(ano)
+            .nlargest(top_n, 'total')
+            .reset_index(drop=True))
+
+
+def fpm_ranking_rds(ano: int) -> pd.DataFrame:
+    """Ranking das 12 RDs por total de transferências em um ano."""
+    df = fpm_pe()
+    sub = df[df['ANO'] == ano]
+    agg = (sub.groupby('regiao_desenvolvimento', as_index=False)['total_mes']
+              .sum().rename(columns={'total_mes': 'total'}))
+    total = agg['total'].sum()
+    agg['pct_no_estado'] = 100 * agg['total'] / total
+    return agg.sort_values('total', ascending=False).reset_index(drop=True)
+
+
+def fpm_evolucao_estadual_por_tipo() -> pd.DataFrame:
+    """
+    Série anual por tipo de transferência (soma de todos os municípios de PE).
+    Colunas: ANO, item, total
+    """
+    df = fpm_pe()
+    agg = (df.groupby(['ANO', 'item'], as_index=False)['total_mes']
+             .sum().rename(columns={'total_mes': 'total'}))
+    return agg.sort_values(['item', 'ANO']).reset_index(drop=True)
+
+
+def fpm_composicao_por_tipo_e_rd(rd_nome: str, ano: int) -> pd.DataFrame:
+    """
+    Composição % por tipo de transferência para uma RD (ou estado inteiro
+    se rd_nome == '__todas__').
+    Colunas: item, total, pct
+    """
+    df = fpm_pe()
+    sub = df[df['ANO'] == ano]
+    if rd_nome != '__todas__':
+        sub = sub[sub['regiao_desenvolvimento'] == rd_nome]
+    agg = (sub.groupby('item', as_index=False)['total_mes']
+              .sum().rename(columns={'total_mes': 'total'}))
+    total = agg['total'].sum()
+    agg['pct'] = 100 * agg['total'] / total if total > 0 else 0
+    return agg.sort_values('total', ascending=False).reset_index(drop=True)
+
+
+def fpm_kpis_estaduais(ano: int) -> dict:
+    """KPIs estaduais de transferências para um ano."""
+    df = fpm_municipal_ano(ano)
+    total = df['total'].sum()
+    top1 = df.nlargest(1, 'total').iloc[0]
+    n_itens = fpm_pe()['item'].nunique()
+    tipo_maior = (fpm_pe()[fpm_pe()['ANO'] == ano]
+                  .groupby('item')['total_mes'].sum()
+                  .idxmax())
+
+    anos = fpm_anos_disponiveis()
+    cresc_pct = None
+    if len(anos) >= 2 and ano in anos:
+        ano_ant = anos[anos.index(ano) + 1] if anos.index(ano) + 1 < len(anos) else None
+        if ano_ant:
+            df_ant = fpm_municipal_ano(ano_ant)
+            total_ant = df_ant['total'].sum()
+            if total_ant > 0:
+                cresc_pct = (total - total_ant) / total_ant * 100
+
+    return {
+        'ano': ano,
+        'total': float(total),
+        'cresc_pct': cresc_pct,
+        'top_municipio': top1['municipio'],
+        'top_municipio_total': float(top1['total']),
+        'top_municipio_pct': float(top1['pct_no_estado']),
+        'n_itens': n_itens,
+        'tipo_maior': tipo_maior,
+    }
+
+
+def fpm_municipio_detalhe(cod_ibge_6: int, ano: int) -> dict:
+    """Detalhes de transferências para um município em um ano."""
+    df = fpm_municipal_ano(ano)
+    sub = df[df['cod_ibge_6'] == cod_ibge_6]
+    if sub.empty:
+        return None
+    row = sub.iloc[0]
+
+    df_sorted = df.sort_values('total', ascending=False).reset_index(drop=True)
+    rank_est = int(df_sorted[df_sorted['cod_ibge_6'] == cod_ibge_6].index[0]) + 1
+
+    df_rd = df[df['regiao_desenvolvimento'] == row['regiao_desenvolvimento']]
+    df_rd_sorted = df_rd.sort_values('total', ascending=False).reset_index(drop=True)
+    rank_rd = int(df_rd_sorted[df_rd_sorted['cod_ibge_6'] == cod_ibge_6].index[0]) + 1
+
+    df_raw = fpm_pe()
+    comp = (df_raw[(df_raw['cod_ibge_6'] == cod_ibge_6) & (df_raw['ANO'] == ano)]
+            .groupby('item')['total_mes'].sum().to_dict())
+
+    return {
+        'cod_ibge_6': int(cod_ibge_6),
+        'municipio': row['municipio'],
+        'ano': int(ano),
+        'total': float(row['total']),
+        'pct_na_rd': float(row['pct_na_rd']),
+        'pct_no_estado': float(row['pct_no_estado']),
+        'rank_estadual': rank_est,
+        'rank_na_rd': rank_rd,
+        'regiao_desenvolvimento': row['regiao_desenvolvimento'],
+        'n_municipios_estado': len(df),
+        'n_municipios_rd': len(df_rd),
+        'composicao': comp,
+    }
 
     return estado.sort_values('ano').reset_index(drop=True)

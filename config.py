@@ -112,6 +112,7 @@ MUNICIPIOS_RD = DATA_PROCESSED / "municipios_rd.parquet"
 PREFEITOS = DATA_PROCESSED / "prefeitos.parquet"
 VEREADORES = DATA_PROCESSED / "vereadores.parquet"
 PIB_MUNICIPAL = DATA_PROCESSED / "pib_municipal.parquet"
+FPM_PE       = DATA_PROCESSED / "FPMfinalPE.parquet"
 GEO_MUNICIPIOS = DATA_GEO / "pe_municipios.geojson"
 CATALOGO = DATA_PROCESSED / "catalogo.json"
 
