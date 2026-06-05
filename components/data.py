@@ -1402,6 +1402,8 @@ def pib_estadual_nominal_e_real_base2010() -> pd.DataFrame:
     estado['cresc_nominal_pct'] = estado['pib_nominal'].pct_change() * 100
     estado['cresc_real_pct'] = estado['pib_real_base2010'].pct_change() * 100
 
+    return estado.sort_values('ano').reset_index(drop=True)
+
 
 # ============================================================================
 # Transferências Fiscais (FPM/STN) - FPMfinalPE.parquet
