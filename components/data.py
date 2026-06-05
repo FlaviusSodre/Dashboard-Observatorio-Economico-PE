@@ -1531,6 +1531,20 @@ def fpm_evolucao_estadual_por_tipo() -> pd.DataFrame:
     return agg.sort_values(['item', 'ANO']).reset_index(drop=True)
 
 
+def fpm_evolucao_mensal_por_tipo() -> pd.DataFrame:
+    """
+    Série mensal por tipo de transferência (soma de todos os municípios de PE).
+    Colunas: data (primeiro dia do mês), ANO, Mês, item, total
+    """
+    df = fpm_pe()
+    agg = (df.groupby(['ANO', 'Mês', 'item'], as_index=False)['total_mes']
+             .sum().rename(columns={'total_mes': 'total'}))
+    agg['data'] = pd.to_datetime(
+        agg['ANO'].astype(str) + '-' + agg['Mês'].astype(str).str.zfill(2) + '-01'
+    )
+    return agg.sort_values(['item', 'data']).reset_index(drop=True)
+
+
 def fpm_composicao_por_tipo_e_rd(rd_nome: str, ano: int) -> pd.DataFrame:
     """
     Composição % por tipo de transferência para uma RD (ou estado inteiro

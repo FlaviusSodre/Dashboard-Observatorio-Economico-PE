@@ -260,42 +260,49 @@ def _ranking_rds_fpm(ano: int):
 
 
 # ============================================================================
-# Evolução temporal por tipo de transferência
+# Evolução temporal mensal por tipo de transferência
 # ============================================================================
 
-def _construir_evolucao_temporal():
+def _construir_evolucao_temporal(itens_selecionados: list = None):
     """
-    Linhas anuais com total de transferências de PE por tipo.
-    Uma linha por tipo (FPM, FPE, ICMS, etc.).
+    Linhas mensais com total de transferências de PE por tipo.
+    itens_selecionados filtra quais tipos exibir (default: todos).
     """
-    df = data.fpm_evolucao_estadual_por_tipo()
+    df = data.fpm_evolucao_mensal_por_tipo()
     if df.empty:
         return html.Div("Sem dados.", className="aviso-dados")
+
+    if not itens_selecionados:
+        itens_selecionados = _ITENS_ORDEM
 
     fig = go.Figure()
 
     for i, item in enumerate(_ITENS_ORDEM):
-        sub = df[df['item'] == item].sort_values('ANO')
+        if item not in itens_selecionados:
+            continue
+        sub = df[df['item'] == item].sort_values('data')
         if sub.empty:
             continue
         cor = ITEM_CORES.get(item, PALETTE['cinza_medio'])
-        dash = 'solid' if i < 3 else 'dash'
         fig.add_trace(go.Scatter(
-            x=sub['ANO'],
+            x=sub['data'],
             y=sub['total'] / 1e6,
             mode='lines+markers',
             name=item,
-            line=dict(color=cor, width=2.5 if i == 0 else 2, dash=dash),
-            marker=dict(size=6, color=cor),
+            line=dict(color=cor, width=2.5 if i == 0 else 2),
+            marker=dict(size=5, color=cor),
             hovertemplate=(
                 f'<b>{item}</b><br>'
-                '%{x}<br>'
+                '%{x|%b/%Y}<br>'
                 'R$ %{y:.1f} mi<extra></extra>'
             ),
         ))
 
+    n_itens = len(itens_selecionados)
+    altura = 380 if n_itens > 1 else 320
+
     charts.aplicar_layout_default(fig,
-        height=360,
+        height=altura,
         showlegend=True,
         legend=dict(
             orientation='h',
@@ -303,11 +310,13 @@ def _construir_evolucao_temporal():
             xanchor='right', x=1,
             font=dict(size=10, color=PALETTE['cinza_medio']),
         ),
-        margin=dict(l=50, r=20, t=40, b=40),
+        margin=dict(l=50, r=20, t=40, b=50),
         xaxis=dict(
-            tickmode='linear', dtick=1,
             showgrid=False,
-            tickfont=dict(size=10, color=PALETTE['cinza_medio']),
+            tickformat='%b/%Y',
+            tickangle=-30,
+            tickfont=dict(size=9, color=PALETTE['cinza_medio']),
+            dtick='M3',
         ),
         yaxis=dict(
             ticksuffix=' mi',
@@ -318,7 +327,8 @@ def _construir_evolucao_temporal():
             tickfont=dict(size=10, color=PALETTE['cinza_medio']),
         ),
     )
-    return dcc.Graph(figure=fig, config={'displayModeBar': False})
+    return dcc.Graph(id='fpm-evolucao-grafico', figure=fig,
+                     config={'displayModeBar': False})
 
 
 # ============================================================================
@@ -492,9 +502,28 @@ def layout():
         ui.secao(
             etiqueta="evolução temporal",
             titulo="",
-            descricao="total de transferências para Pernambuco por ano · "
-                      "uma linha por tipo de transferência",
-            children=_construir_evolucao_temporal(),
+            descricao="total de transferências para Pernambuco por mês · "
+                      "uma linha por tipo · use o filtro para isolar tipos",
+            children=html.Div([
+                html.Div(className="filtros-row", children=[
+                    html.Div(className="filtro-item", style={"flex": "1 1 auto"}, children=[
+                        html.Label("TIPO:", className="filtro-label"),
+                        dcc.Dropdown(
+                            id='filtro-fpm-evol-tipo',
+                            options=[{'label': it, 'value': it}
+                                     for it in _ITENS_ORDEM],
+                            value=_ITENS_ORDEM,
+                            multi=True,
+                            clearable=False,
+                            searchable=False,
+                            className="filtro-dropdown",
+                            placeholder="Selecione os tipos...",
+                        ),
+                    ]),
+                ]),
+                html.Div(id='fpm-evolucao-container',
+                         children=_construir_evolucao_temporal(_ITENS_ORDEM)),
+            ]),
         ),
 
         html.Div(className="grid-duplo grid-1-1", children=[
@@ -676,6 +705,13 @@ def callbacks(app):
     )
     def toggle_btn(cod):
         return 'btn-link' if cod else 'btn-link hidden'
+
+    @app.callback(
+        Output('fpm-evolucao-container', 'children'),
+        Input('filtro-fpm-evol-tipo', 'value'),
+    )
+    def atualizar_evolucao(itens):
+        return _construir_evolucao_temporal(itens or _ITENS_ORDEM)
 
     @app.callback(
         Output('fpm-composicao-container', 'children'),
