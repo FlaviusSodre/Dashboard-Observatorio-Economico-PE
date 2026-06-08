@@ -6,18 +6,18 @@
   "scope": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",
-  "theme_color": "#5B7B9A",
+  "theme_color": "#FFFFFF",
   "lang": "pt-BR",
   "orientation": "any",
   "icons": [
     {
-      "src": "/assets/Icone_App_3.png",
-      "sizes": "any",
+      "src": "/assets/app_icon.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/Icone_App_3.png",
+      "src": "/assets/app_icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

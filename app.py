@@ -38,7 +38,7 @@ app = Dash(
     meta_tags=[
         {"name": "viewport",
          "content": "width=device-width, initial-scale=1.0, viewport-fit=cover"},
-        {"name": "theme-color", "content": "#5B7B9A"},
+        {"name": "theme-color", "content": "#FFFFFF"},
         {"name": "mobile-web-app-capable", "content": "yes"},
         {"name": "apple-mobile-web-app-capable", "content": "yes"},
         {"name": "apple-mobile-web-app-status-bar-style", "content": "default"},
@@ -59,7 +59,8 @@ app.index_string = '''<!DOCTYPE html>
     <title>{%title%}</title>
     {%favicon%}
     <link rel="manifest" href="/assets/manifest.json">
-    <link rel="apple-touch-icon" href="/assets/Icone_App_3.png">
+    <link rel="apple-touch-icon" href="/assets/app_icon_180.png">
+    <link rel="apple-touch-icon-precomposed" href="/assets/app_icon_180.png">
     {%css%}
   </head>
   <body>

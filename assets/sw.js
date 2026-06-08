@@ -1,11 +1,11 @@
 /* Service Worker — Observatório Econômico de Pernambuco */
 
-const CACHE = 'observatorio-v3';
+const CACHE = 'observatorio-v4';
 
 const SHELL = [
   '/',
   '/assets/style.css',
-  '/assets/Icone_App_3.png',
+  '/assets/app_icon.png',
 ];
 
 self.addEventListener('install', function(e) {
