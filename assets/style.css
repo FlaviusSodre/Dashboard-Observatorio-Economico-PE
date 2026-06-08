@@ -87,7 +87,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
 }
 
 .header-logo {
-    height: 64px;
+    height: 52px;
     width: auto;
     display: block;
 }
@@ -1309,7 +1309,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
 /* Logo duplicado no header-dir — oculto no desktop */
 .header-logo-mobile-dir {
     display: none;
-    height: 48px;
+    height: 32px;
     width: auto;
     border-radius: 2px;
 }
