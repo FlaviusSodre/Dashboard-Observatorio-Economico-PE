@@ -5,7 +5,7 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#F5F3EE",
+  "background_color": "#FFFFFF",
   "theme_color": "#5B7B9A",
   "lang": "pt-BR",
   "orientation": "any",
@@ -15,6 +15,12 @@
       "sizes": "any",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/assets/Icone_App_3.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
