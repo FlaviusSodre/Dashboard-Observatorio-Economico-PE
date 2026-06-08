@@ -121,10 +121,9 @@ CATALOGO = DATA_PROCESSED / "catalogo.json"
 # ============================================================================
 
 META = {
-    "titulo": "Pernambuco em dados",
+    "titulo": "Pernambuco em números",
     "sobretitulo": "Observatório Econômico",
-    "orgao": "Secretaria de Desenvolvimento Econômico",
-    "governo": "Governo do Estado de Pernambuco",
+    "orgao": "Desenvolvido por Flavius Sodré",
     "uf": "PE",
     "uf_codigo": 26,  # código IBGE
     "n_municipios": 185,  # 184 + Fernando de Noronha

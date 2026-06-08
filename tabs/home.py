@@ -71,7 +71,7 @@ def layout():
             # Rodapé da capa
             html.Div(className="home-rodape", children=[
                 html.Span(
-                    "Pernambuco em dados · SDEC · Governo do Estado",
+                    "Pernambuco em números · Desenvolvido por Flavius Sodré",
                     className="home-rodape-texto",
                 ),
                 html.Span("2025", className="home-rodape-ano"),

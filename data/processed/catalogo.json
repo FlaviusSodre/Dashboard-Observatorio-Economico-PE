@@ -129,7 +129,7 @@
     {
       "arquivo": "municipios_rd.parquet",
       "descricao": "Municípios × Regiões de Desenvolvimento",
-      "fonte": "SDEC · Governo de Pernambuco",
+      "fonte": "Pernambuco em números",
       "periodicidade": "estática",
       "n_registros": 185,
       "colunas": [

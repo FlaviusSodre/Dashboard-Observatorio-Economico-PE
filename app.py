@@ -44,7 +44,7 @@ app = Dash(
         {"name": "apple-mobile-web-app-status-bar-style", "content": "default"},
         {"name": "apple-mobile-web-app-title", "content": "Observatório PE"},
         {"name": "description",
-         "content": "Observatório Econômico de Pernambuco — indicadores econômicos em dados."},
+         "content": "Pernambuco em números — indicadores econômicos de Pernambuco."},
     ],
 )
 

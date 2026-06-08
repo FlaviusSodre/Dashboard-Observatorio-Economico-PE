@@ -148,7 +148,7 @@ def header(titulo, sobretitulo, orgao, atualizado_em):
                 children=[
                     html.A("Home", id='btn-home-header-mobile',
                            n_clicks=0, className='header-home-mobile'),
-                    html.Img(src="/assets/logo.jpeg", className="header-logo"),
+                    html.Img(src="/assets/Icone_App_3.png", className="header-logo"),
                 ]
             ),
             # Centro: títulos
@@ -181,7 +181,7 @@ def header(titulo, sobretitulo, orgao, atualizado_em):
                                      alt="Bandeira de Pernambuco"),
                         ]
                     ),
-                    html.Img(src="/assets/logo.jpeg",
+                    html.Img(src="/assets/Icone_App_3.png",
                              className="header-logo-mobile-dir",
                              alt="Logo"),
                 ]

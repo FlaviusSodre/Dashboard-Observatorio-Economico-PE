@@ -61,7 +61,7 @@ def gerar_catalogo():
         (POBREZA_REGIONAL, 'Pobreza e extrema pobreza - regional',
          'PNAD Contínua · IBGE', 'trimestral'),
         (MUNICIPIOS_RD, 'Municípios × Regiões de Desenvolvimento',
-         'SDEC · Governo de Pernambuco', 'estática'),
+         'Pernambuco em números', 'estática'),
         (PREFEITOS, 'Prefeitos eleitos por município',
          'TSE · Eleições municipais', 'a cada 4 anos'),
         (VEREADORES, 'Vereadores eleitos por município',
