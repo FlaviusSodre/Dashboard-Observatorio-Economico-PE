@@ -35,7 +35,7 @@ def layout():
 
                 # Textos principais
                 html.Div(className="home-textos", children=[
-                    html.Img(src="/assets/logo.png", className="home-logo"),
+                    html.Img(src="/assets/logo_central.png", className="home-logo"),
                     html.H1("Observatório Econômico",
                             className="home-titulo"),
                     html.H2("de Pernambuco",
