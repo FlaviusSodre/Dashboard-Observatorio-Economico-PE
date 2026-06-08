@@ -1,6 +1,6 @@
 /* Service Worker — Observatório Econômico de Pernambuco */
 
-const CACHE = 'observatorio-v2';
+const CACHE = 'observatorio-v3';
 
 const SHELL = [
   '/',
