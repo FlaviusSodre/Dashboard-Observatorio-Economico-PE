@@ -1108,6 +1108,12 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
     display: none; /* removido conforme solicitação */
 }
 
+.home-logo {
+    height: 120px;
+    width: auto;
+    margin-bottom: 24px;
+}
+
 .home-titulo {
     font-family: var(--font-sans);
     font-size: clamp(56px, 8.5vw, 96px);
