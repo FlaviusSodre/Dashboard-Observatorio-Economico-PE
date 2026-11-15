@@ -1,0 +1,32 @@
+# Arquivo de citação lido pelo GitHub ("Cite this repository") e pelo Zenodo.
+# Antes de criar a versão v2.0 no GitHub: ponha em date-released a data da publicação.
+# Depois que o Zenodo gerar o DOI: apague o "# " do começo da linha "doi" e troque XXXXXXX.
+cff-version: 1.2.0
+message: "Se usar este software, cite-o conforme os metadados abaixo."
+type: software
+title: "Observatório Econômico de Pernambuco"
+abstract: >-
+  Painel interativo de acesso aberto com indicadores econômicos e sociais de
+  Pernambuco e de seus 185 municípios, como emprego formal, desemprego, PIB,
+  pobreza e transferências aos municípios, a partir de bases oficiais
+  (Novo Caged, PNAD Contínua, IBGE, SEPLAG-PE, TSE e STN). Desenvolvido em
+  Python/Dash.
+authors:
+  - family-names: "Sodré"
+    given-names: "Flavius Raymundo Arruda"
+    affiliation: "Universidade Católica de Pernambuco"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+version: "2.0"
+date-released: "2026-11-30"
+# doi: "10.5281/zenodo.XXXXXXX"
+repository-code: "https://github.com/FlaviusSodre/Dashboard-Observatorio_Economico"
+url: "https://www.observatorioeconomicope.com.br"
+license: AGPL-3.0-or-later
+keywords:
+  - ciência de dados
+  - indicadores econômicos
+  - Pernambuco
+  - dados abertos
+  - economia regional
+  - painel de dados
+  - Dash

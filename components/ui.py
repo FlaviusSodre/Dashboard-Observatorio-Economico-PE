@@ -136,7 +136,7 @@ def header(titulo, sobretitulo, orgao, atualizado_em):
     """
     Header global do dashboard. Aparece no topo de todas as abas.
 
-    Logo da Secretaria à esquerda, título central editorial,
+    Logo do Observatório à esquerda, título central editorial,
     bandeira de PE + status à direita.
     """
     return html.Div(
