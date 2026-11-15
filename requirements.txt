@@ -2,7 +2,7 @@
 
 # Core
 dash>=2.17,<3.0
-plotly>=5.20
+plotly>=5.20,<7.0   # o plotly 7 removeu go.Choroplethmapbox, usado nos mapas (components/charts.py)
 
 # Dados
 pandas>=2.2
