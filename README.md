@@ -92,8 +92,8 @@ Cobertura: 185 municípios (184 e o distrito estadual de Fernando de Noronha) e 
 ## Como rodar localmente
 
 ```bash
-git clone https://github.com/FlaviusSodre/Dashboard-Observatorio_Economico.git
-cd Dashboard-Observatorio_Economico
+git clone https://github.com/FlaviusSodre/Dashboard-Observatorio-Economico-PE.git
+cd Dashboard-Observatorio-Economico-PE
 python -m venv .venv
 source .venv/bin/activate        # no Windows: .venv\Scripts\activate
 pip install -r requirements.txt
