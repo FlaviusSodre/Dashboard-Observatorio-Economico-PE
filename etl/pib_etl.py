@@ -415,6 +415,76 @@ def _processar_vab_absoluto() -> pd.DataFrame:
                    'regiao_desenvolvimento']].reset_index(drop=True)
 
 
+# ============================================================================
+# Complemento pela API do IBGE (versão 2.0)
+# ============================================================================
+# A SEPLAG publicou o PIB de 2022 e 2023 sem a abertura de VAB e impostos,
+# porque o IBGE adiou essa divulgação ao mudar o ano de referência das
+# Contas Nacionais (Nota Técnica 02/2024). Este passo consulta a tabela
+# SIDRA 5938 e preenche VAB total, impostos e VAB por setor dos anos a
+# partir de 2022 assim que o IBGE os publicar. Enquanto a API devolver
+# "..." para esses anos, nada muda.
+
+_SIDRA_VARS = {'37': 'pib', '543': 'impostos', '498': 'vab_total',
+               '513': 'agropecuaria', '517': 'industria', '6575': 'servicos',
+               '525': 'apu'}
+
+
+def _complementar_com_sidra(final, df_vab, df_abs):
+    from datetime import date
+    try:
+        from etl._fontes import sidra
+        vs = ','.join(_SIDRA_VARS)
+        bruto = sidra(f"/t/5938/n6/in%20n3%2026/v/{vs}/p/2022-{date.today().year}",
+                      'pib_municipios_5938')
+    except Exception as e:
+        print(f"[PIB] SIDRA 5938 indisponível ({e}); VAB 2022+ segue sem dado")
+        return final, df_vab, df_abs
+    if bruto.empty:
+        return final, df_vab, df_abs
+    sid = bruto.assign(cod_ibge_6=bruto['D1C'].astype(str).str[:6].astype(int),
+                       ano=bruto['D3C'].astype(int),
+                       var=bruto['D2C'].astype(str).map(_SIDRA_VARS),
+                       v=bruto['valor'] * 1000)
+    sid = sid.pivot_table(index=['cod_ibge_6', 'ano'], columns='var', values='v',
+                          aggfunc='first').reset_index()
+    tem_vab = sid.dropna(subset=['vab_total']) if 'vab_total' in sid else sid.iloc[0:0]
+    if tem_vab.empty:
+        anos = sorted(sid['ano'].unique().tolist())
+        print(f"[PIB] IBGE ainda não divulgou VAB e impostos de "
+              f"{anos[0]}-{anos[-1]} (SIDRA 5938 devolve '...'); mantido como está")
+        return final, df_vab, df_abs
+
+    # 1) VAB total e impostos no pib_municipal
+    final = final.merge(tem_vab[['cod_ibge_6', 'ano', 'vab_total', 'impostos']]
+                        .rename(columns={'vab_total': '_vab', 'impostos': '_imp'}),
+                        on=['cod_ibge_6', 'ano'], how='left')
+    final['vab_total'] = final['vab_total'].fillna(final['_vab'])
+    final['impostos'] = final['impostos'].fillna(final['_imp'])
+    final = final.drop(columns=['_vab', '_imp'])
+    final['dependencia_impostos_pct'] = 100 * final['impostos'] / final['pib']
+
+    # 2) VAB absoluto por setor, só anos que ainda não existem
+    novos = tem_vab[~tem_vab['ano'].isin(df_abs['ano'].unique())]
+    if not novos.empty:
+        nomes = final[['cod_ibge_6', 'municipio', 'regiao_desenvolvimento']] \
+            .drop_duplicates('cod_ibge_6')
+        longo = novos.melt(id_vars=['cod_ibge_6', 'ano'],
+                           value_vars=['agropecuaria', 'industria', 'servicos', 'apu'],
+                           var_name='setor', value_name='vab').dropna(subset=['vab'])
+        longo = longo.merge(nomes, on='cod_ibge_6', how='left')
+        df_abs = pd.concat([df_abs, longo[df_abs.columns]], ignore_index=True)
+
+        # 3) participação do município no VAB do setor da sua RD
+        tot = longo.groupby(['ano', 'setor', 'regiao_desenvolvimento'])['vab'] \
+                   .transform('sum')
+        rel = longo.assign(participacao_na_rd=longo['vab'] / tot)
+        df_vab = pd.concat([df_vab, rel[df_vab.columns]], ignore_index=True)
+        print(f"[PIB] VAB setorial complementado pelo IBGE: "
+              f"{sorted(novos['ano'].unique().tolist())}")
+    return final, df_vab, df_abs
+
+
 def main():
     print("[PIB] Lendo Tabela 6 (VAB Total, Impostos, PIB)...")
     df_pib = _ler_tabela_6(INPUT_XLS)
@@ -564,6 +634,12 @@ def main():
                   f"vab_total R$ {vab_ref/1e9:.3f} bi "
                   f"(diferença R$ {diff:.0f})")
     print(f"[PIB] Gerado: {OUTPUT_VAB_ABSOLUTO.name}")
+
+    # Complemento pela API do IBGE (VAB e impostos a partir de 2022)
+    final, df_vab, df_abs = _complementar_com_sidra(final, df_vab, df_abs)
+    final.to_parquet(OUTPUT, index=False)
+    df_vab.to_parquet(OUTPUT_VAB_SETORIAL, index=False)
+    df_abs.to_parquet(OUTPUT_VAB_ABSOLUTO, index=False)
 
 
 if __name__ == '__main__':

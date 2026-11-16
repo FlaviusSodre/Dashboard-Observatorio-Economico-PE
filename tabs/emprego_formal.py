@@ -424,6 +424,12 @@ def _opcoes_meses():
     return [{'label': _MESES_PT[m-1], 'value': m} for m in range(1, 13)]
 
 
+def _periodo_caged() -> str:
+    """'2020—2026', a partir das datas presentes no CAGED municipal."""
+    df = data.caged_municipal()
+    return f"{df['data'].min().year}—{df['data'].max().year}"
+
+
 def _ultimo_ano_mes():
     """Retorna (ano, mes) da última data disponível no CAGED municipal."""
     df = data.caged_municipal()
@@ -475,7 +481,8 @@ def layout():
             html.Div([
                 html.P("Emprego formal · CAGED",
                        className="aba-titulo"),
-                html.P("saldo, admissões e desligamentos · 185 municípios · 2020-2025",
+                html.P("saldo, admissões e desligamentos · 185 municípios · "
+                       f"{_periodo_caged()}",
                        className="aba-subtitulo"),
             ]),
             html.Div(className="aba-acoes", children=[
@@ -586,7 +593,7 @@ def layout():
             ui.secao(
                 etiqueta="evolução por setor",
                 titulo="Saldo mensal por setor",
-                descricao="média móvel de 3 meses · 2020—2025",
+                descricao=f"média móvel de 3 meses · {_periodo_caged()}",
                 children=_setor_serie(),
             ),
         ]),

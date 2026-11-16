@@ -1624,3 +1624,98 @@ h1, h2, h3, h4 { margin: 0; font-weight: 500; }
         padding-bottom: max(10px, env(safe-area-inset-bottom));
     }
 }
+
+/* ===========================================================================
+   VERSÃO 2.0 · componentes das abas novas
+   (FPM, Transferências, Atividade Econômica, Comércio Exterior,
+   Indicadores Sociais)
+   ========================================================================= */
+
+.kpi-faixa-tres { grid-template-columns: repeat(3, 1fr); }
+
+/* Etiqueta de contexto (Pernambuco ou município clicado) acima dos KPIs */
+.kpi-contexto-v2 {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cinza-medio);
+    margin: 0 0 5px 2px;
+}
+
+/* Seletor em pílulas (alterna visões de um gráfico) */
+.seletor-pilulas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0 0 10px 0;
+}
+.seletor-pilulas-label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--cinza-medio);
+    border: 0.5px solid var(--cinza-neblina);
+    border-radius: 999px;
+    padding: 4px 12px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--branco);
+    transition: color 100ms ease, border-color 100ms ease, background 100ms ease;
+}
+.seletor-pilulas-label:hover { color: var(--preto-titulo); border-color: var(--cinza-claro); }
+.seletor-pilulas-input { display: none; }
+.seletor-pilulas-label:has(.seletor-pilulas-input:checked) {
+    color: var(--branco);
+    background: #2F6DB0;
+    border-color: #2F6DB0;
+}
+
+/* KPI cujo valor é um nome (produto, país, município) */
+.kpi-texto .kpi-valor {
+    font-size: 17px;
+    line-height: 1.25;
+    margin-top: 4px;
+}
+
+/* Nota explicativa sob gráficos */
+.nota-grafico {
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--cinza-medio);
+    margin: 4px 2px var(--gap-secao);
+    max-width: 980px;
+}
+
+/* Tabela simples das abas novas */
+.tabela-v2-wrap { overflow-x: auto; }
+.tabela-v2 {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 12px;
+}
+.tabela-v2 thead th {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cinza-medio);
+    background: var(--bege-fundo-claro);
+    border-bottom: 1px solid var(--cinza-claro);
+    padding: 9px 12px;
+    white-space: nowrap;
+}
+.tabela-v2 tbody td {
+    padding: 8px 12px;
+    border-bottom: 0.5px solid var(--cinza-neblina);
+    color: var(--grafite);
+}
+.tabela-v2 tbody tr:hover td { background: var(--bege-fundo-claro); }
+.tabela-v2 .td-esq { text-align: left; }
+.tabela-v2 .td-dir { text-align: right; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 768px) {
+    .kpi-faixa-tres { grid-template-columns: repeat(2, 1fr); }
+    .seletor-pilulas-label { padding: 4px 10px; }
+}

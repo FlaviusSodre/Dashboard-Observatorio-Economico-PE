@@ -1,11 +1,15 @@
 {
-  "gerado_em": "2026-11-15T21:36:41",
+  "gerado_em": "2026-11-16T09:42:28",
   "datasets": [
     {
       "arquivo": "caged_municipal.parquet",
-      "descricao": "CAGED por município",
-      "fonte": "Novo CAGED · MTE/SE",
+      "descricao": "Emprego formal por município",
+      "fonte": "Novo CAGED · MTE",
       "periodicidade": "mensal",
+      "usado_em": "Mercado de trabalho · Emprego formal",
+      "periodo_inicio": "2020-01-01",
+      "periodo_fim": "2026-09-01",
+      "periodo": "jan/2020 a set/2026",
       "n_registros": 14985,
       "colunas": [
         "data",
@@ -20,14 +24,17 @@
         "var_relativa"
       ],
       "tamanho_kb": 145.7,
-      "periodo_inicio": "2020-01-01",
-      "periodo_fim": "2026-09-01"
+      "gerado_em": "2026-11-16"
     },
     {
       "arquivo": "caged_genero.parquet",
-      "descricao": "CAGED por gênero (estadual)",
-      "fonte": "Novo CAGED · MTE/SE",
+      "descricao": "Emprego formal por sexo",
+      "fonte": "Novo CAGED · MTE",
       "periodicidade": "mensal",
+      "usado_em": "Mercado de trabalho · Emprego formal",
+      "periodo_inicio": "2020-01-01",
+      "periodo_fim": "2026-09-01",
+      "periodo": "jan/2020 a set/2026",
       "n_registros": 162,
       "colunas": [
         "data",
@@ -40,14 +47,17 @@
         "saldo"
       ],
       "tamanho_kb": 8.3,
-      "periodo_inicio": "2020-01-01",
-      "periodo_fim": "2026-09-01"
+      "gerado_em": "2026-11-16"
     },
     {
       "arquivo": "caged_setor.parquet",
-      "descricao": "CAGED por grande setor (estadual)",
-      "fonte": "Novo CAGED · MTE/SE",
+      "descricao": "Emprego formal por grande setor",
+      "fonte": "Novo CAGED · MTE",
       "periodicidade": "mensal",
+      "usado_em": "Mercado de trabalho · Emprego formal",
+      "periodo_inicio": "2020-01-01",
+      "periodo_fim": "2026-09-01",
+      "periodo": "jan/2020 a set/2026",
       "n_registros": 405,
       "colunas": [
         "data",
@@ -61,14 +71,17 @@
         "estoque"
       ],
       "tamanho_kb": 15.0,
-      "periodo_inicio": "2020-01-01",
-      "periodo_fim": "2026-09-01"
+      "gerado_em": "2026-11-16"
     },
     {
       "arquivo": "pnad_pe.parquet",
-      "descricao": "PNAD Contínua - Pernambuco",
+      "descricao": "Mercado de trabalho de Pernambuco",
       "fonte": "PNAD Contínua · IBGE",
       "periodicidade": "trimestral",
+      "usado_em": "Mercado de trabalho · Desemprego",
+      "periodo_inicio": "2012-03-01",
+      "periodo_fim": "2026-06-01",
+      "periodo": "2012T1 a 2026T2",
       "n_registros": 290,
       "colunas": [
         "data",
@@ -81,14 +94,17 @@
         "unidade"
       ],
       "tamanho_kb": 7.8,
-      "periodo_inicio": "2012-03-01",
-      "periodo_fim": "2026-06-01"
+      "gerado_em": "2026-11-16"
     },
     {
       "arquivo": "pnad_regional.parquet",
-      "descricao": "PNAD Contínua - 9 estados do NE",
+      "descricao": "Mercado de trabalho nos estados do NE",
       "fonte": "PNAD Contínua · IBGE",
       "periodicidade": "trimestral",
+      "usado_em": "Mercado de trabalho · Desemprego",
+      "periodo_inicio": "2012-03-01",
+      "periodo_fim": "2026-06-01",
+      "periodo": "2012T1 a 2026T2",
       "n_registros": 4060,
       "colunas": [
         "data",
@@ -102,14 +118,17 @@
         "unidade"
       ],
       "tamanho_kb": 33.2,
-      "periodo_inicio": "2012-03-01",
-      "periodo_fim": "2026-06-01"
+      "gerado_em": "2026-11-16"
     },
     {
       "arquivo": "pobreza_regional.parquet",
-      "descricao": "Pobreza e extrema pobreza - regional",
+      "descricao": "Pobreza e extrema pobreza",
       "fonte": "PNAD Contínua · IBGE",
       "periodicidade": "trimestral",
+      "usado_em": "Mercado de trabalho · Desemprego",
+      "periodo_inicio": "2012-03-01",
+      "periodo_fim": "2026-06-01",
+      "periodo": "2012T1 a 2026T2",
       "n_registros": 1392,
       "colunas": [
         "data",
@@ -123,57 +142,17 @@
         "unidade"
       ],
       "tamanho_kb": 19.6,
-      "periodo_inicio": "2012-03-01",
-      "periodo_fim": "2026-06-01"
-    },
-    {
-      "arquivo": "municipios_rd.parquet",
-      "descricao": "Municípios × Regiões de Desenvolvimento",
-      "fonte": "Pernambuco em números",
-      "periodicidade": "estática",
-      "n_registros": 185,
-      "colunas": [
-        "cod_ibge_6",
-        "municipio",
-        "regiao_desenvolvimento"
-      ],
-      "tamanho_kb": 5.7
-    },
-    {
-      "arquivo": "prefeitos.parquet",
-      "descricao": "Prefeitos eleitos por município",
-      "fonte": "TSE · Eleições municipais",
-      "periodicidade": "a cada 4 anos",
-      "n_registros": 184,
-      "colunas": [
-        "cod_ibge_6",
-        "municipio",
-        "prefeito_nome",
-        "prefeito_partido",
-        "prefeito_genero"
-      ],
-      "tamanho_kb": 9.2
-    },
-    {
-      "arquivo": "vereadores.parquet",
-      "descricao": "Vereadores eleitos por município",
-      "fonte": "TSE · Eleições municipais",
-      "periodicidade": "a cada 4 anos",
-      "n_registros": 2149,
-      "colunas": [
-        "cod_ibge_6",
-        "municipio",
-        "vereador_nome",
-        "partido",
-        "genero"
-      ],
-      "tamanho_kb": 39.4
+      "gerado_em": "2026-11-16"
     },
     {
       "arquivo": "pib_municipal.parquet",
-      "descricao": "PIB municipal de Pernambuco (2010-2023)",
-      "fonte": "SEPLAG-PE / IBGE · Sistema de Contas Regionais",
+      "descricao": "PIB dos municípios",
+      "fonte": "SEPLAG-PE / IBGE · Contas Regionais",
       "periodicidade": "anual",
+      "usado_em": "Índices Socioeconômicos · PIB municipal",
+      "periodo_inicio": "2010",
+      "periodo_fim": "2023",
+      "periodo": "2010 a 2023",
       "n_registros": 2590,
       "colunas": [
         "cod_ibge_6",
@@ -189,13 +168,325 @@
         "pib_per_capita_real_2023",
         "dependencia_impostos_pct"
       ],
-      "tamanho_kb": 153.3
+      "tamanho_kb": 153.3,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "municipios_rd.parquet",
+      "descricao": "Municípios e Regiões de Desenvolvimento",
+      "fonte": "SEPLAG-PE",
+      "periodicidade": "estática",
+      "usado_em": "todas as abas",
+      "periodo_inicio": null,
+      "periodo_fim": null,
+      "periodo": "—",
+      "n_registros": 185,
+      "colunas": [
+        "cod_ibge_6",
+        "municipio",
+        "regiao_desenvolvimento"
+      ],
+      "tamanho_kb": 5.7,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "prefeitos.parquet",
+      "descricao": "Prefeitos eleitos",
+      "fonte": "TSE",
+      "periodicidade": "a cada 4 anos",
+      "usado_em": "Gestão Pública · Eleições municipais",
+      "periodo_inicio": null,
+      "periodo_fim": null,
+      "periodo": "—",
+      "n_registros": 184,
+      "colunas": [
+        "cod_ibge_6",
+        "municipio",
+        "prefeito_nome",
+        "prefeito_partido",
+        "prefeito_genero"
+      ],
+      "tamanho_kb": 9.2,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "vereadores.parquet",
+      "descricao": "Vereadores eleitos",
+      "fonte": "TSE",
+      "periodicidade": "a cada 4 anos",
+      "usado_em": "Gestão Pública · Eleições municipais",
+      "periodo_inicio": null,
+      "periodo_fim": null,
+      "periodo": "—",
+      "n_registros": 2149,
+      "colunas": [
+        "cod_ibge_6",
+        "municipio",
+        "vereador_nome",
+        "partido",
+        "genero"
+      ],
+      "tamanho_kb": 39.4,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "populacao_municipal.parquet",
+      "descricao": "População dos municípios",
+      "fonte": "IBGE · estimativas e Censo 2022",
+      "periodicidade": "anual",
+      "usado_em": "per capita e taxas",
+      "periodo_inicio": "2001",
+      "periodo_fim": "2026",
+      "periodo": "2001 a 2026",
+      "n_registros": 4810,
+      "colunas": [
+        "cod_ibge_6",
+        "cod_ibge_7",
+        "ano",
+        "populacao",
+        "origem"
+      ],
+      "tamanho_kb": 33.1,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "transferencias_pe.parquet",
+      "descricao": "Transferências constitucionais (FPM, FUNDEB, royalties...)",
+      "fonte": "STN · Tesouro Transparente",
+      "periodicidade": "mensal",
+      "usado_em": "Gestão Pública · FPM e Transferências",
+      "periodo_inicio": "2019-01-01",
+      "periodo_fim": "2026-09-01",
+      "periodo": "jan/2019 a set/2026",
+      "n_registros": 132144,
+      "colunas": [
+        "data",
+        "ano",
+        "mes",
+        "cod_ibge_6",
+        "municipio",
+        "categoria",
+        "item",
+        "dec1",
+        "dec2",
+        "dec3",
+        "valor",
+        "origem"
+      ],
+      "tamanho_kb": 2047.2,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "atividade_mensal.parquet",
+      "descricao": "IBC-R, indústria, comércio, serviços e IPCA",
+      "fonte": "BCB · IBGE (PIM-PF, PMC, PMS, IPCA)",
+      "periodicidade": "mensal",
+      "usado_em": "Atividade Econômica",
+      "periodo_inicio": "2003-01-01",
+      "periodo_fim": "2026-10-01",
+      "periodo": "jan/2003 a out/2026",
+      "n_registros": 66667,
+      "colunas": [
+        "data",
+        "valor",
+        "fonte",
+        "regiao",
+        "categoria",
+        "tipo",
+        "medida"
+      ],
+      "tamanho_kb": 322.1,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "pib_trimestral.parquet",
+      "descricao": "PIB trimestral",
+      "fonte": "CONDEPE/FIDEM · SEPLAG-PE (planilha)",
+      "periodicidade": "trimestral",
+      "usado_em": "Atividade Econômica · Visão geral",
+      "periodo_inicio": "2022-03-01",
+      "periodo_fim": "2025-09-01",
+      "periodo": "2022T1 a 2025T3",
+      "n_registros": 30,
+      "colunas": [
+        "ano",
+        "trimestre",
+        "regiao",
+        "var_interanual",
+        "var_acum_ano",
+        "var_acum_4t",
+        "var_trimestre_anterior",
+        "data",
+        "rotulo"
+      ],
+      "tamanho_kb": 6.2,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "agro_pam.parquet",
+      "descricao": "Produção agrícola municipal",
+      "fonte": "IBGE · PAM",
+      "periodicidade": "anual",
+      "usado_em": "Atividade Econômica · Agropecuária",
+      "periodo_inicio": "2015",
+      "periodo_fim": "2025",
+      "periodo": "2015 a 2025",
+      "n_registros": 13423,
+      "colunas": [
+        "ano",
+        "nivel",
+        "cod_ibge_6",
+        "cod_produto",
+        "produto",
+        "area_colhida_ha",
+        "quantidade_t",
+        "valor_mil"
+      ],
+      "tamanho_kb": 114.2,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "agro_lspa.parquet",
+      "descricao": "Estimativas de safra",
+      "fonte": "IBGE · LSPA",
+      "periodicidade": "mensal",
+      "usado_em": "Atividade Econômica · Agropecuária",
+      "periodo_inicio": "2023-11-01",
+      "periodo_fim": "2026-10-01",
+      "periodo": "nov/2023 a out/2026",
+      "n_registros": 2756,
+      "colunas": [
+        "data",
+        "produto",
+        "cod_produto",
+        "variavel",
+        "valor"
+      ],
+      "tamanho_kb": 15.1,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "agro_ppm.parquet",
+      "descricao": "Pecuária municipal",
+      "fonte": "IBGE · PPM",
+      "periodicidade": "anual",
+      "usado_em": "Atividade Econômica · Agropecuária",
+      "periodo_inicio": "2015",
+      "periodo_fim": "2025",
+      "periodo": "2015 a 2025",
+      "n_registros": 15281,
+      "colunas": [
+        "ano",
+        "cod_ibge_6",
+        "tipo",
+        "produto",
+        "unidade",
+        "quantidade",
+        "valor_mil",
+        "nivel"
+      ],
+      "tamanho_kb": 83.7,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "comex_uf_mensal.parquet",
+      "descricao": "Exportações e importações (UF do produto)",
+      "fonte": "Comex Stat · MDIC",
+      "periodicidade": "mensal",
+      "usado_em": "Comércio Exterior",
+      "periodo_inicio": "2019-01-01",
+      "periodo_fim": "2026-10-01",
+      "periodo": "jan/2019 a out/2026",
+      "n_registros": 5239,
+      "colunas": [
+        "data",
+        "ano",
+        "mes",
+        "fluxo",
+        "uf",
+        "regiao",
+        "valor_fob"
+      ],
+      "tamanho_kb": 56.8,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "comex_municipios_mensal.parquet",
+      "descricao": "Exportações e importações por município",
+      "fonte": "Comex Stat · MDIC",
+      "periodicidade": "mensal",
+      "usado_em": "Comércio Exterior · Municípios",
+      "periodo_inicio": "2019-01-01",
+      "periodo_fim": "2026-10-01",
+      "periodo": "jan/2019 a out/2026",
+      "n_registros": 6331,
+      "colunas": [
+        "data",
+        "ano",
+        "mes",
+        "fluxo",
+        "cod_ibge_6",
+        "municipio",
+        "valor_fob"
+      ],
+      "tamanho_kb": 69.0,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "ips_pe.parquet",
+      "descricao": "Índice de Progresso Social",
+      "fonte": "IPS Brasil",
+      "periodicidade": "anual (edições)",
+      "usado_em": "Indicadores Sociais · Progresso social",
+      "periodo_inicio": "2024",
+      "periodo_fim": "2026",
+      "periodo": "edições 2024 a 2026",
+      "n_registros": 41440,
+      "colunas": [
+        "edicao",
+        "cod_ibge_6",
+        "municipio",
+        "nivel",
+        "dimensao",
+        "indicador",
+        "valor",
+        "rank_br",
+        "rank_pe"
+      ],
+      "tamanho_kb": 192.9,
+      "gerado_em": "2026-11-16"
+    },
+    {
+      "arquivo": "mvi_pe.parquet",
+      "descricao": "Mortes violentas intencionais",
+      "fonte": "SDS-PE · microdados",
+      "periodicidade": "mensal",
+      "usado_em": "Indicadores Sociais · Segurança pública",
+      "periodo_inicio": "2004-01-01",
+      "periodo_fim": "2026-10-01",
+      "periodo": "jan/2004 a out/2026",
+      "n_registros": 53036,
+      "colunas": [
+        "data",
+        "ano",
+        "mes",
+        "cod_ibge_6",
+        "municipio",
+        "sexo",
+        "faixa_etaria",
+        "natureza",
+        "vitimas"
+      ],
+      "tamanho_kb": 166.6,
+      "gerado_em": "2026-11-16"
     },
     {
       "arquivo": "pe_municipios.geojson",
-      "descricao": "Malha territorial dos municípios de PE",
+      "descricao": "Malha dos municípios de PE",
       "fonte": "API de Malhas · IBGE",
       "periodicidade": "estática",
+      "usado_em": "mapas",
+      "periodo": "—",
       "tamanho_kb": 222.6
     }
   ]

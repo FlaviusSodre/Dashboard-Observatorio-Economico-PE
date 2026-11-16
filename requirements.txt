@@ -9,5 +9,12 @@ pandas>=2.2
 openpyxl>=3.1      # leitura de xlsx
 pyarrow>=15.0      # parquet (mais rápido que fastparquet)
 
+# ETL (python -m etl.run_all).
+requests>=2.31            # downloads das APIs (IBGE, BCB, Comex Stat, Tesouro, SDS-PE)
+truststore>=0.9 ; python_version >= "3.10"  # valida certificados HTTPS pelo sistema operacional (sites do governo)
+xlrd>=2.0                 # leitura das planilhas .xls do PIB municipal (SEPLAG-PE)
+pdfplumber>=0.10          # leitura do PDF do PIB municipal 2022-2023
+ftfy>=6.0                 # corrige acentos quebrados nos nomes do TSE (prefeitos e vereadores)
+
 # Produção (opcional, para deploy)
 gunicorn>=22.0     # servidor WSGI para deploy

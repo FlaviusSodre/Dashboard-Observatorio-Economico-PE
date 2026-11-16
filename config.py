@@ -112,9 +112,43 @@ MUNICIPIOS_RD = DATA_PROCESSED / "municipios_rd.parquet"
 PREFEITOS = DATA_PROCESSED / "prefeitos.parquet"
 VEREADORES = DATA_PROCESSED / "vereadores.parquet"
 PIB_MUNICIPAL = DATA_PROCESSED / "pib_municipal.parquet"
-FPM_PE       = DATA_PROCESSED / "FPMfinalPE.parquet"
 GEO_MUNICIPIOS = DATA_GEO / "pe_municipios.geojson"
 CATALOGO = DATA_PROCESSED / "catalogo.json"
+
+# Versão 2.0 ----------------------------------------------------------------
+# Downloads automáticos (APIs do IBGE, BCB, Comex Stat, Tesouro e SDS-PE)
+# ficam em data/cache/, fora do git. O ETL lê dali quando roda com --offline
+# ou quando uma fonte está fora do ar.
+DATA_CACHE = ROOT / "data" / "cache"
+
+POPULACAO_MUNICIPAL = DATA_PROCESSED / "populacao_municipal.parquet"
+
+# Gestão Pública: transferências constitucionais (STN)
+TRANSFERENCIAS_PE = DATA_PROCESSED / "transferencias_pe.parquet"
+
+# Atividade Econômica
+ATIVIDADE_MENSAL = DATA_PROCESSED / "atividade_mensal.parquet"
+PIB_TRIMESTRAL = DATA_PROCESSED / "pib_trimestral.parquet"
+PIB_TRIMESTRAL_RAW = DATA_RAW / "pib_trimestral_pe.csv"
+AGRO_LSPA = DATA_PROCESSED / "agro_lspa.parquet"
+AGRO_PAM = DATA_PROCESSED / "agro_pam.parquet"
+AGRO_PPM = DATA_PROCESSED / "agro_ppm.parquet"
+
+# Comércio Exterior
+COMEX_UF_MENSAL = DATA_PROCESSED / "comex_uf_mensal.parquet"
+COMEX_NCM_MENSAL = DATA_PROCESSED / "comex_pe_ncm_mensal.parquet"
+COMEX_PAIS_MENSAL = DATA_PROCESSED / "comex_pe_pais_mensal.parquet"
+COMEX_NCM_PAIS_ANUAL = DATA_PROCESSED / "comex_pe_ncm_pais_anual.parquet"
+COMEX_NCM = DATA_PROCESSED / "comex_ncm.parquet"
+COMEX_MUN_MENSAL = DATA_PROCESSED / "comex_municipios_mensal.parquet"
+COMEX_MUN_SH4_ANUAL = DATA_PROCESSED / "comex_municipios_sh4_anual.parquet"
+AGROSTAT_RAW = DATA_RAW / "agrostat_ncm_agronegocio.xlsx"
+
+# Indicadores Sociais
+IPS_RAW_DIR = DATA_RAW / "ips"
+IPS_PE = DATA_PROCESSED / "ips_pe.parquet"
+IPS_REFERENCIAS = DATA_PROCESSED / "ips_referencias.parquet"
+MVI_PE = DATA_PROCESSED / "mvi_pe.parquet"
 
 # ============================================================================
 # METADADOS INSTITUCIONAIS

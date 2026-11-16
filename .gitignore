@@ -6,3 +6,6 @@ __pycache__/
 .ipynb_checkpoints/
 .cache/
 Instruções.txt
+
+# Downloads automáticos do ETL (v2.0); refeitos a cada execução
+data/cache/

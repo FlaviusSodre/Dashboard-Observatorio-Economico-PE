@@ -63,6 +63,7 @@ app.index_string = '''<!DOCTYPE html>
     <link rel="apple-touch-icon-precomposed" href="/assets/app_icon_180.png">
     {%css%}
   </head>
+  <script data-goatcounter="https://observatorio-pe.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <body>
     {%app_entry%}
     <footer>
@@ -199,7 +200,9 @@ def construir_layout():
 
     try:
         ultima = data.caged_municipal()['data'].max()
-        atualizado_em = ultima.strftime("%b · %Y").lower()
+        meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun',
+                 'jul', 'ago', 'set', 'out', 'nov', 'dez']
+        atualizado_em = f"{meses[ultima.month - 1]} · {ultima.year}"
     except Exception:
         atualizado_em = "—"
 

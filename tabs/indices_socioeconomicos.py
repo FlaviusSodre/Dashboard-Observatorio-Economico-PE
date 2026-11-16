@@ -552,7 +552,9 @@ def _construir_carga_tributaria(ano: int, rd_nome: str = None):
                           'color': PALETTE['grafite']}),
             html.P("O IBGE atrasou a divulgação dos dados de VAB e Impostos "
                    "por causa da mudança de ano-base do Sistema de Contas "
-                   "Nacionais (Nota Técnica 02/2024). Até 2021 está coberto.",
+                   "Nacionais (Nota Técnica 02/2024). Até 2021 está coberto; "
+                   "quando o IBGE publicar os anos seguintes, o ETL completa "
+                   "a série automaticamente.",
                    style={'font-size': '11px',
                           'color': PALETTE['cinza_medio'],
                           'margin': '0'}),

@@ -7,10 +7,15 @@ type: software
 title: "Observatório Econômico de Pernambuco"
 abstract: >-
   Painel interativo de acesso aberto com indicadores econômicos e sociais de
-  Pernambuco e de seus 185 municípios, como emprego formal, desemprego, PIB,
-  pobreza e transferências aos municípios, a partir de bases oficiais
-  (Novo Caged, PNAD Contínua, IBGE, SEPLAG-PE, TSE e STN). Desenvolvido em
-  Python/Dash.
+  Pernambuco e de seus 185 municípios: emprego formal, desemprego, pobreza,
+  PIB municipal e trimestral, atividade econômica (IBC-R, indústria,
+  comércio, serviços, inflação e agropecuária), comércio exterior e
+  agronegócio, FPM e transferências constitucionais, Índice de Progresso
+  Social e mortes violentas intencionais. Integra bases oficiais (Novo Caged,
+  PNAD Contínua e demais pesquisas do IBGE, Banco Central, SEPLAG-PE e
+  CONDEPE/FIDEM, Comex Stat, Agrostat, Tesouro Nacional, TSE, IPS Brasil e
+  SDS-PE), com ETL que baixa os dados diretamente das APIs públicas.
+  Desenvolvido em Python/Dash.
 authors:
   - family-names: "Sodré"
     given-names: "Flavius Raymundo Arruda"
@@ -30,3 +35,5 @@ keywords:
   - economia regional
   - painel de dados
   - Dash
+  - finanças públicas
+  - comércio exterior

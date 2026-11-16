@@ -7,6 +7,8 @@ Esta aba é a primeira a ser exibida ao abrir o dashboard.
 Layout estático e elegante com identidade visual do projeto.
 """
 
+from datetime import date
+
 from dash import html, dcc
 from config import PALETTE
 
@@ -65,6 +67,7 @@ def layout():
                     html.Span("Gestão Pública", className="home-chip"),
                     html.Span("Atividade Econômica", className="home-chip"),
                     html.Span("Comércio Exterior", className="home-chip"),
+                    html.Span("Indicadores Sociais", className="home-chip"),
                 ]),
             ]),
 
@@ -74,7 +77,7 @@ def layout():
                     "Pernambuco em números · Desenvolvido por Flavius Sodré",
                     className="home-rodape-texto",
                 ),
-                html.Span("2025", className="home-rodape-ano"),
+                html.Span(str(date.today().year), className="home-rodape-ano"),
             ]),
 
             # Faixa decorativa inferior (listras das cores de PE)

@@ -12,7 +12,8 @@ Estrutura:
 
 Fontes:
 - PNAD Contínua trimestral (IBGE), regiões: 9 estados do NE + Nordeste agregado
-- Período: 2012-T1 a 2025-T3
+- Período: do 1º trimestre de 2012 ao último trimestre disponível
+  (calculado a partir dos dados, ver _periodo_pnad)
 """
 
 import pandas as pd
@@ -464,6 +465,12 @@ def _tabela_estados(trimestre: str = None,
 # Layout
 # ============================================================================
 
+def _periodo_pnad() -> str:
+    """'2012—2026', a partir dos anos presentes na base da PNAD."""
+    df = data.pnad_regional()
+    return f"{int(df['ano'].min())}—{int(df['ano'].max())}"
+
+
 def layout():
     trimestres = data.pnad_reg_trimestres_disponiveis('Pernambuco')
     trim_default = trimestres[0]
@@ -486,7 +493,7 @@ def layout():
         # Série histórica
         ui.secao(
             etiqueta="evolução temporal",
-            titulo="Taxa de desemprego · 2012—2025",
+            titulo=f"Taxa de desemprego · {_periodo_pnad()}",
             descricao="Pernambuco vs Nordeste · trimestres móveis",
             children=_serie_taxa_desemprego(),
         ),
