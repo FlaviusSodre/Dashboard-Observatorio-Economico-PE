@@ -239,7 +239,7 @@ O site conta acessos de forma anônima, sem cookies e sem coletar dados pessoais
 
 Use o botão "Cite this repository", na coluna da direita do GitHub, ou:
 
-> SODRÉ, Flavius Raymundo Arruda. **Observatório Econômico de Pernambuco**. Versão 2.0. Recife, 2026. Software. Disponível em: https://doi.org/10.5281/zenodo.XXXXXXX.
+> SODRÉ, Flavius Raymundo Arruda. **Observatório Econômico de Pernambuco**. Versão 2.0. Recife, 2026. Software. Disponível em: https://doi.org/10.5281/zenodo.24281425.
 
 ## Autoria
 
