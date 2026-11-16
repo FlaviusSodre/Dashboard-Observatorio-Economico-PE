@@ -23,7 +23,7 @@ authors:
     # orcid: "https://orcid.org/0000-0000-0000-0000"
 version: "2.0"
 date-released: "2026-11-30"
-# doi: "10.5281/zenodo.XXXXXXX"
+doi: "10.5281/zenodo.24281425"
 repository-code: "https://github.com/FlaviusSodre/Dashboard-Observatorio_Economico"
 url: "https://www.observatorioeconomicope.com.br"
 license: AGPL-3.0-or-later

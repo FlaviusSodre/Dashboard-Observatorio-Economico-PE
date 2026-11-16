@@ -1,7 +1,6 @@
 # Observatório Econômico de Pernambuco
 
-<!-- Depois de gerar o DOI no Zenodo, troque XXXXXXX pelo número e apague as marcas de comentário desta linha -->
-<!-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX) -->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24281425.svg)](https://doi.org/10.5281/zenodo.24281425)
 
 Painel interativo de acesso aberto com indicadores econômicos e sociais de Pernambuco e de seus 185 municípios, desenvolvido em Python/Dash por Flavius Sodré.
 
